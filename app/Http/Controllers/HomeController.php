@@ -154,7 +154,7 @@ class HomeController extends Controller
         Carousel::where('id', $id)
             ->update(['status' => $status]);
 
-        return redirect('carousel')->with('success','Success');
+        return redirect('carousel')->with('success', 'Success');
     }
 
     public function carousel_process(Request $request)
@@ -210,11 +210,14 @@ class HomeController extends Controller
         $message_count = Contact_us::where('status', 'Pending')->count();
         $reservation_count = Reservations::where('status', 'Pending')->count();
 
+        $accomodation = Accomodation::all();
+
 
         return view('accomodation', compact('widget'), [
             'type' => $type,
             'message_count' => $message_count,
             'reservation_count' => $reservation_count,
+            'accomodation' => $accomodation,
         ]);
     }
 
@@ -263,24 +266,15 @@ class HomeController extends Controller
             'title' => $request->input('title'),
             'description' => $request->input('description'),
             'image' => $imageName,
+            'status' => 'activated',
         ]);
 
         $new_accomodation->save();
 
-        // foreach ($request->images as $key => $image) {
-        //     $imageName = time() . rand(1, 99) . '.' . $image->extension();
-        //     $image->move(public_path('storage'), $imageName);
-
-        //     $new_image = new Accomodation_images([
-        //         'accomodation_id' => $new_accomodation->id,
-        //         'image' => $imageName,
-        //     ]);
-
-        //     $new_image->save();
-        // }
-
         return redirect('accomodation')->with('success', 'Success');
     }
+
+
 
     public function message_process(Request $request)
     {
@@ -359,9 +353,12 @@ class HomeController extends Controller
 
     public function reservation_process_final_data(Request $request)
     {
+        $reservation = Reservations::find($request->input('id'));
+
+        $amount = $reservation->payment + $request->input('amount');
         Reservations::where('id', $request->input('id'))
             ->update([
-                'payment' => $request->input('amount'),
+                'payment' => $amount,
                 'status' => 'Paid',
             ]);
 
@@ -370,5 +367,30 @@ class HomeController extends Controller
         Mail::to($request->input('email'))->send(new Contact_us_mail($subject, $messages));
 
         return redirect('reservations')->with('success', 'Success');
+    }
+
+    public function cancel_reservation($id, $email)
+    {
+
+        Reservations::where('id', $id)
+            ->update([
+                'status' => 'Cancelled',
+            ]);
+
+        $subject = '';
+        $messages = 'Due to unpaid downpayment your reservation has been cancelled.';
+        Mail::to($email)->send(new Contact_us_mail($subject, $messages));
+
+        return redirect('reservations')->with('success', 'Success');
+    }
+
+    public function accomodation_status($id, $status)
+    {
+        Accomodation::where('id', $id)
+            ->update([
+                'status' => $status,
+            ]);
+
+        return redirect('accomodation')->with('success', 'Success');
     }
 }

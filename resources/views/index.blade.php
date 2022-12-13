@@ -429,7 +429,7 @@
                                     nikanmagdale.official@gmail.com</a></li>
                         </ul>
                     </div>
-                    <div class="col-md-4">
+                    {{-- <div class="col-md-4">
                         <h3>Menu Link</h3>
                         <ul class="link_menu">
                             <li class="active"><a href="#">Home</a></li>
@@ -439,7 +439,7 @@
                             <li><a href="blog.html">Blog</a></li>
                             <li><a href="contact.html">Contact Us</a></li>
                         </ul>
-                    </div>
+                    </div> --}}
                     {{-- <div class="col-md-4">
                      <h3>News letter</h3>
                      <form class="bottom_form">

@@ -30,6 +30,7 @@
                         <td>Receipt</td>
                         <td>Reservation Date</td>
                         <td>Date</td>
+                        <td>Cancel</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -120,8 +121,10 @@
                                             </div>
                                         </div>
                                     </div>
-                                @else
+                                @elseif($data->status == 'Paid')
                                     <button class="btn btn-success btn-block" disabled>{{ $data->status }}</button>
+                                @else
+                                    <button class="btn btn-danger btn-block" disabled>{{ $data->status }}</button>
                                 @endif
                             </td>
                             <td>{{ $data->first_name }}</td>
@@ -138,8 +141,8 @@
                                 </button>
 
                                 <!-- Modal -->
-                                <div class="modal fade" id="exampleModal_image{{ $data->id }}" tabindex="-1" role="dialog"
-                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal fade" id="exampleModal_image{{ $data->id }}" tabindex="-1"
+                                    role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -149,12 +152,13 @@
                                                 </button>
                                             </div>
                                             <div class="modal-body">
-                                                <img src="{{ asset('/storage/'. $data->receipt) }}" class="img img-thumbnail">
+                                                <img src="{{ asset('/storage/' . $data->receipt) }}"
+                                                    class="img img-thumbnail">
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"
                                                     data-dismiss="modal">Close</button>
-                                                
+
                                             </div>
                                         </div>
                                     </div>
@@ -163,6 +167,15 @@
                             <td>{{ $data->date_from }}</td>
                             {{-- <td>{{ $data->date_to }}</td> --}}
                             <td>{{ date('F j, Y h:i a', strtotime($data->created_at)) }}</td>
+                            <td>
+                                @if ($data->status == 'Pending')
+                                    <a href="{{ url('cancel_reservation', [
+                                        'id' => $data->id,
+                                        'email' => $data->email,
+                                    ]) }}"
+                                        class="btn btn-danger btn-block">Cancel</a>
+                                @endif
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

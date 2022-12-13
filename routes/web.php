@@ -41,6 +41,9 @@ Route::post('/reservation_process_final_data', 'HomeController@reservation_proce
 Route::post('/about_edit_process', 'HomeController@about_edit_process')->name('about_edit_process');
 Route::post('/about_edit_image', 'HomeController@about_edit_image')->name('about_edit_image');
 Route::get('/carousel_active/{id}/{status}', 'HomeController@carousel_active')->name('carousel_active');
+Route::get('/cancel_reservation/{id}/{email}', 'HomeController@cancel_reservation')->name('cancel_reservation');
+Route::get('/accomodation_status/{id}/{status}', 'HomeController@accomodation_status')->name('accomodation_status');
+
 
 
 

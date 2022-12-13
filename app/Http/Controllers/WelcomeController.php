@@ -14,11 +14,11 @@ class WelcomeController extends Controller
 {
     public function welcome()
     {
-        $room = Accomodation::where('type_id', 'room')->get();
-        $meals = Accomodation::where('type_id', 'meals')->get();
-        $liqour = Accomodation::where('type_id', 'liqour')->get();
+        $room = Accomodation::where('type_id', 'room')->where('status','activated')->get();
+        $meals = Accomodation::where('type_id', 'meals')->where('status','activated')->get();
+        $liqour = Accomodation::where('type_id', 'liqour')->where('status','activated')->get();
 
-        $gallery = Accomodation::get();
+        $gallery = Accomodation::where('status','activated')->get();
 
         $carousel = Carousel::where('status', 'active')->get();
         $carousel_first = Carousel::where('status', 'active')->orderBy('id', 'desc')->limit(1)->first();

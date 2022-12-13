@@ -178,12 +178,12 @@
                 </a>
             </li>
 
-            <li class="nav-item {{ Nav::isRoute('accomodation_list') }}">
+            {{-- <li class="nav-item {{ Nav::isRoute('accomodation_list') }}">
                 <a class="nav-link" href="{{ route('accomodation_list') }}">
                     <i class="fas fa-fw fa-user"></i>
                     <span>{{ __('Accomodation List') }}</span>
                 </a>
-            </li>
+            </li> --}}
 
           
             <li class="nav-item {{ Nav::isRoute('message') }}">

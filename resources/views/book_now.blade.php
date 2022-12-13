@@ -94,6 +94,8 @@
                 <div class="col-md-12">
                     <div class="titlepage">
                         <h2>Book Now</h2>
+                        <h6 style="text-align: left;color:blue;">Note: Pay 3,000 Pesos For Downpayment</h6>
+                        <h6 style="text-align: left;color:blue;">Note: Please attached screenshot of your receipt as a proof of payment</h6>
                     </div>
                 </div>
             </div>
@@ -273,7 +275,7 @@
                                     nikanmagdale.official@gmail.com</a></li>
                         </ul>
                     </div>
-                    <div class="col-md-4">
+                    {{-- <div class="col-md-4">
                         <h3>Menu Link</h3>
                         <ul class="link_menu">
                             <li class="active"><a href="#">Home</a></li>
@@ -283,7 +285,7 @@
                             <li><a href="blog.html">Blog</a></li>
                             <li><a href="contact.html">Contact Us</a></li>
                         </ul>
-                    </div>
+                    </div> --}}
                     {{-- <div class="col-md-4">
                      <h3>News letter</h3>
                      <form class="bottom_form">

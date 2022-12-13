@@ -17,7 +17,7 @@
     @endif
 
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12" style="margin-bottom: 20px">
             <div class="card">
                 <div class="card-header">
                     Add New Accomodation
@@ -58,6 +58,51 @@
                             <button class="btn btn-sm btn-success float-right">Submit</button>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    List
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Title</th>
+                                <th>Description</th>
+                                <th>Image</th>
+                                <th>Option</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($accomodation as $data)
+                                <tr>
+                                    <td>{{ $data->type_id }}</td>
+                                    <td>{{ $data->title }}</td>
+                                    <td>{{ $data->description }}</td>
+                                    <td><img src="{{ asset('/storage/' . $data->image) }}" style="width:100%;" class="img img-thumbnail"></td>
+                                    <td>
+                                        @if ($data->status == 'activated')
+                                            <a href="{{ url('accomodation_status', [
+                                                'id' => $data->id,
+                                                'status' => 'deactivated',
+                                            ]) }}"
+                                                class="btn btn-success btn-block">Activated</a>
+                                        @else
+                                            <a href="{{ url('accomodation_status', [
+                                                'id' => $data->id,
+                                                'status' => 'activated',
+                                            ]) }}"
+                                                class="btn btn-danger btn-block">Deactivated</a>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

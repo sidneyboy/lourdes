@@ -107,6 +107,7 @@
                         <table class="table table-bordered table-hover">
                             <thead>
                                 <tr>
+                                    <td>Payment</td>
                                     <td>Status</td>
                                     <td>First Name</td>
                                     <td>Middle Name</td>
@@ -122,6 +123,9 @@
                             <tbody>
                                 @foreach ($reservations as $data)
                                     <tr>
+                                        <td>
+                                            ₱{{ number_format($data->payment,2,".",",") }}
+                                        </td>
                                         <td>{{ $data->status }}</td>
                                         <td>{{ $data->first_name }}</td>
                                         <td>{{ $data->middle_name }}</td>
