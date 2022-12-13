@@ -17,7 +17,7 @@
     @endif
 
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12" style="margin-bottom: 20px;">
             <div class="card">
                 <div class="card-header">Carousel</div>
                 <div class="card-body">
@@ -39,6 +39,45 @@
                             <button class="btn btn-success float-right" type="submit">Submit</button>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">Carousel List</div>
+                <div class="card-body">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Option</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($carousel as $data)
+                                <tr>
+                                    <td><img src="{{ asset('/storage/' . $data->image) }}" class="img img-thumbnail"></td>
+                                    <td>
+                                        @if ($data->status == 'active')
+                                            <!-- Button trigger modal -->
+                                            <a href="{{ url('carousel_active', [
+                                                'id' => $data->id,
+                                                'status' => 'inactive',
+                                            ]) }}"
+                                                class="btn btn-block btn-success">Activated</a>
+                                        @else
+                                            <a href="{{ url('carousel_active', [
+                                                'id' => $data->id,
+                                                'status' => 'active',
+                                            ]) }}"
+                                                class="btn btn-block btn-danger">Deactivated</a>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

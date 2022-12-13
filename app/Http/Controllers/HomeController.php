@@ -56,7 +56,7 @@ class HomeController extends Controller
         $reserved_monthly = Reservations::whereMonth('created_at', $month)->count();
         $reserved_yearly = Reservations::whereYear('created_at', $year)->count();
 
-        $reservations = Reservations::where('status','Paid')->orderBy('id','desc')->get();
+        $reservations = Reservations::where('status', 'Paid')->orderBy('id', 'desc')->get();
         return view('home', compact('widget'), [
             'message_count' => $message_count,
             'reservation_count' => $reservation_count,
@@ -80,11 +80,26 @@ class HomeController extends Controller
         $message_count = Contact_us::where('status', 'Pending')->count();
         $reservation_count = Reservations::where('status', 'Pending')->count();
 
+        $about_count = About::count();
+
+        $about = About::all();
+
+
 
         return view('about', compact('widget'), [
             'message_count' => $message_count,
+            'about' => $about,
+            'about_count' => $about_count,
             'reservation_count' => $reservation_count,
         ]);
+    }
+
+    public function about_edit_process(Request $request)
+    {
+        About::where('id', $request->input('about_id'))
+            ->update(['about' => $request->input('about_edit')]);
+
+        return redirect('about')->with('success', 'Success');
     }
 
     public function about_process(Request $request)
@@ -103,6 +118,17 @@ class HomeController extends Controller
         return redirect('about')->with('success', 'Success');
     }
 
+    public function about_edit_image(Request $request)
+    {
+        $imageName = time() . rand(1, 99) . '.' . $request->images->extension();
+        $request->images->move(public_path('storage'), $imageName);
+
+        About::where('id', $request->input('about_id'))
+            ->update(['image' => $imageName]);
+
+        return redirect('about')->with('success', 'Success');
+    }
+
     public function carousel()
     {
         $users = User::count();
@@ -114,12 +140,21 @@ class HomeController extends Controller
 
         $message_count = Contact_us::where('status', 'Pending')->count();
         $reservation_count = Reservations::where('status', 'Pending')->count();
-
+        $carousel = Carousel::all();
 
         return view('carousel', compact('widget'), [
             'message_count' => $message_count,
+            'carousel' => $carousel,
             'reservation_count' => $reservation_count,
         ]);
+    }
+
+    public function carousel_active($id, $status)
+    {
+        Carousel::where('id', $id)
+            ->update(['status' => $status]);
+
+        return redirect('carousel')->with('success','Success');
     }
 
     public function carousel_process(Request $request)

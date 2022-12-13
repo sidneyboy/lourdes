@@ -38,6 +38,11 @@ Route::post('/message_process', 'HomeController@message_process')->name('message
 Route::get('/reservations', 'HomeController@reservations')->name('reservations');
 Route::post('/reservation_process_data', 'HomeController@reservation_process_data')->name('reservation_process_data');
 Route::post('/reservation_process_final_data', 'HomeController@reservation_process_final_data')->name('reservation_process_final_data');
+Route::post('/about_edit_process', 'HomeController@about_edit_process')->name('about_edit_process');
+Route::post('/about_edit_image', 'HomeController@about_edit_image')->name('about_edit_image');
+Route::get('/carousel_active/{id}/{status}', 'HomeController@carousel_active')->name('carousel_active');
+
+
 
 
 Route::post('/carousel_process', 'HomeController@carousel_process')->name('carousel_process');
