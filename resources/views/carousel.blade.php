@@ -47,8 +47,8 @@
             <div class="card">
                 <div class="card-header">Carousel List</div>
                 <div class="card-body">
-                    asdasdasd
-                    {{-- <table class="table table-bordered table-hover">
+                
+                    <table class="table table-bordered table-hover">
                         <thead>
                             <tr>
                                 <th>Image</th>
@@ -78,7 +78,7 @@
                                 </tr>
                             @endforeach
                         </tbody>
-                    </table> --}}
+                    </table>
                 </div>
             </div>
         </div>
