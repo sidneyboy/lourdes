@@ -21,7 +21,8 @@
             <div class="card">
                 <div class="card-header">About</div>
                 <div class="card-body">
-                    @if ($about_count == 0)
+                    asdasdasd
+                    {{-- @if ($about_count == 0)
                         <form action="{{ route('about_process') }}" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group">
@@ -129,7 +130,7 @@
                                 @endforeach
                             </tbody>
                         </table>
-                    @endif
+                    @endif --}}
                 </div>
             </div>
         </div>
