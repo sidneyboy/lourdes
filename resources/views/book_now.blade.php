@@ -94,8 +94,8 @@
                 <div class="col-md-12">
                     <div class="titlepage">
                         <h2>Book Now</h2>
-                        <h6 style="text-align: left;color:blue;">Note: Pay 3,000 Pesos For Downpayment</h6>
-                        <h6 style="text-align: left;color:blue;">Note: Please attached screenshot of your receipt as a proof of payment</h6>
+                        <h3 style="text-align: left;color:blue;">Note: For booking a reservation, there is a down payment of 500 pesos. The QR code for our G-Cash is shown below. </h3>
+                        <h3 style="text-align: left;color:blue;">Note: Please attach a screenshot of your receipt as a proof of payment.</h3>
                     </div>
                 </div>
             </div>

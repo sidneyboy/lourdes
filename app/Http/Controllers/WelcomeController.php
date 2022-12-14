@@ -24,7 +24,20 @@ class WelcomeController extends Controller
         $carousel_first = Carousel::where('status', 'active')->orderBy('id', 'desc')->limit(1)->first();
 
         $about = About::orderBy('id', 'desc')->limit(1)->first();
+
+        $reservations_dates = Reservations::where('status','Paid Downpayment')
+                                            ->orWhere('status','Partial Payment')
+                                            ->orWhere('status','Paid')
+                                            ->get();
+
+
+        // $reserved_dates = array();
+        foreach ($reservations_dates as $key => $value) {
+            $reserved_dates[] = $value->date_from;
+        }
+
         return view('index', [
+            'reserved_dates' => $reserved_dates,
             'room' => $room,
             'carousel_first' => $carousel_first,
             'carousel' => $carousel,

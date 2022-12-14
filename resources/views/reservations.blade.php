@@ -18,10 +18,12 @@
 
     <div class="row">
         <div class="table table-responsive">
-            <table class="table table-bordered table-hover">
+            <table class="table table-bordered table-hover table-sm">
                 <thead>
                     <tr>
                         <td>Status</td>
+                        <td>Amount</td>
+                        <td>Payment Date</td>
                         <td>First Name</td>
                         <td>Middle Name</td>
                         <td>Last Name</td>
@@ -59,9 +61,19 @@
                                                     </div>
                                                     <div class="modal-body">
                                                         <div class="form-group">
-                                                            <label for="">Amount Initialy Paid</label>
-                                                            <input type="text" name="amount" class="form-control"
-                                                                required>
+                                                            <div class="form-group">
+                                                                <label for="">Amount Initialy Paid</label>
+                                                                <input type="text" name="amount" class="form-control"
+                                                                    required>
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label for="">Date</label>
+                                                                <input type="date" class="form-control"
+                                                                    name="payment_date" required>
+                                                            </div>
+
+
 
                                                             <input type="hidden" name="id"
                                                                 value="{{ $data->id }}">
@@ -78,11 +90,11 @@
                                             </div>
                                         </div>
                                     </div>
-                                @elseif($data->status == 'For Final Payment')
+                                @elseif($data->status == 'Paid Downpayment')
                                     <!-- Button trigger modal -->
                                     <button type="button" class="btn btn-info" data-toggle="modal"
                                         data-target="#exampleModal_final_payment{{ $data->id }}">
-                                        Reserved
+                                        {{ $data->status }}
                                     </button>
 
                                     <!-- Modal -->
@@ -121,10 +133,61 @@
                                             </div>
                                         </div>
                                     </div>
+                                @elseif($data->status == 'Partial Payment')
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-info" data-toggle="modal"
+                                        data-target="#exampleModal_final_payment{{ $data->id }}">
+                                        {{ $data->status }}
+                                    </button>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="exampleModal_final_payment{{ $data->id }}"
+                                        tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                        aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <form action="{{ route('reservation_process_final_data') }}"
+                                                    method="post">
+                                                    @csrf
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="form-group">
+                                                            <label for="">Final Payment</label>
+                                                            <input type="text" name="amount" class="form-control"
+                                                                required>
+
+                                                            <input type="hidden" name="id"
+                                                                value="{{ $data->id }}">
+                                                            <input type="hidden" name="email"
+                                                                value="{{ $data->email }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Close</button>
+                                                        <button type="submit" class="btn btn-primary">Save
+                                                            changes</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
                                 @elseif($data->status == 'Paid')
-                                    <button class="btn btn-success btn-block" disabled>{{ $data->status }}</button>
+                                    <button class="btn btn-success btn-block" disabled>Fully Paid</button>
+                                @endif
+                            </td>
+                            <td>
+                                {{ number_format($data->payment, 2, '.', ',') }}
+                            </td>
+                            <td>
+                                @if ($data->payment_dates != null)
+                                    {{ date('F j, Y', strtotime($data->payment_dates)) }}
                                 @else
-                                    <button class="btn btn-danger btn-block" disabled>{{ $data->status }}</button>
                                 @endif
                             </td>
                             <td>{{ $data->first_name }}</td>
@@ -164,7 +227,7 @@
                                     </div>
                                 </div>
                             </td>
-                            <td>{{ $data->date_from }}</td>
+                            <td>{{ date('F j, Y', strtotime($data->date_from)) }}</td>
                             {{-- <td>{{ $data->date_to }}</td> --}}
                             <td>{{ date('F j, Y h:i a', strtotime($data->created_at)) }}</td>
                             <td>

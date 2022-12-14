@@ -25,6 +25,8 @@
     <!-- Favicon -->
     <link href="{{ asset('img/favicon.png') }}" rel="icon" type="image/png">
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+
     <style>
         .upload__box {
             padding: 5px;
@@ -151,13 +153,14 @@
 
             <li class="nav-item {{ Nav::isRoute('reservations') }}">
                 <a class="nav-link" href="{{ route('reservations') }}">
-                    <i class="fas fa-fw fa-user"></i>
-                    <span>{{ __('Reservations') }}</span> <span class="badge badge-light">{{ $reservation_count }}</span>
+                    <i class="bi bi-list-check"></i>
+                    <span>{{ __('Reservations') }}</span> <span
+                        class="badge badge-light">{{ $reservation_count }}</span>
                 </a>
             </li>
 
 
-            <li class="nav-item {{ Nav::isRoute('accomodation') }}">
+            {{-- <li class="nav-item {{ Nav::isRoute('accomodation') }}">
                 <a class="nav-link" href="{{ route('accomodation') }}">
                     <i class="fas fa-fw fa-user"></i>
                     <span>{{ __('Accomodations (+)') }}</span> 
@@ -176,6 +179,33 @@
                     <i class="fas fa-fw fa-user"></i>
                     <span>{{ __('Carousel (+)') }}</span>
                 </a>
+            </li> --}}
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+                    aria-expanded="true" aria-controls="collapseUtilities">
+                    <i class="fas fa-fw fa-wrench"></i>
+                    <span>Customer Utilities</span>
+                </a>
+                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Custom Utilities:</h6>
+                        <a class="nav-link" style="color:black;" href="{{ route('accomodation') }}">
+
+                            <span>{{ __('Accomodations (+)') }}</span>
+                        </a>
+                        <a class="nav-link" style="color:black;" href="{{ route('about') }}">
+
+                            <span>{{ __('About (+)') }}</span>
+                        </a>
+                        <a class="nav-link" style="color:black;" href="{{ route('carousel') }}">
+
+                            <span>{{ __('Carousel (+)') }}</span>
+                        </a>
+
+                    </div>
+                </div>
             </li>
 
             {{-- <li class="nav-item {{ Nav::isRoute('accomodation_list') }}">
@@ -185,10 +215,10 @@
                 </a>
             </li> --}}
 
-          
+
             <li class="nav-item {{ Nav::isRoute('message') }}">
                 <a class="nav-link" href="{{ route('message') }}">
-                    <i class="fas fa-fw fa-user"></i>
+                    <i class="bi bi-envelope"></i>
                     <span>{{ __('New Message') }}</span> <span class="badge badge-light">{{ $message_count }}</span>
                 </a>
             </li>
@@ -392,7 +422,8 @@
                                     {{ __('Activity Log') }}
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="#" data-toggle="modal"
+                                    data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     {{ __('Logout') }}
                                 </a>

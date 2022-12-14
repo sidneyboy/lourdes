@@ -21,5 +21,6 @@ class Reservations extends Model
         'date_to',
         'date',
         'payment',
+        'payment_dates',
     ];
 }

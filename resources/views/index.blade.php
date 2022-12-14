@@ -28,9 +28,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css"
         media="screen">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/themes/redmond/jquery-ui.css">
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+   
 </head>
 <!-- body -->
 
@@ -140,6 +142,16 @@
                                 </button>
                             </div>
                         @endif
+
+                        @if (session('success'))
+                            <div class="alert alert-success border-left-success alert-dismissible fade show"
+                                role="alert">
+                                {{ session('success') }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        @endif
                         <div class="book_room">
                             <h1>Book Now</h1>
                             <form class="book_now" method="get" action="{{ route('book_now') }}">
@@ -147,7 +159,9 @@
                                     <div class="col-md-12">
                                         <span>Arrival</span>
                                         <img class="date_cua" src="{{ asset('img/date.png') }}">
-                                        <input type="text" name="dates" class="online_book" />
+                                        {{-- <input type="text" name="dates" class="online_book" /> --}}
+                                        <input type="text" id="datepicker" value="Select Date Here"
+                                            name="dates" class="online_book" />
                                     </div>
                                     <div class="col-md-12">
                                         <button class="book_btn">Book Now</button>
@@ -303,15 +317,7 @@
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    @if (session('success'))
-                        <div class="alert alert-success border-left-success alert-dismissible fade show"
-                            role="alert">
-                            {{ session('success') }}
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                    @endif
+
 
                     <form id="request" class="main_form" action="{{ route('contact_us_process') }}"
                         method="post">
@@ -480,18 +486,29 @@
     <!-- sidebar -->
     <script src="{{ asset('js/jquery.mCustomScrollbar.concat.min.js') }}"></script>
     <script src="{{ asset('js/custom.js') }}"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+  
+    
     <script>
-        $(function() {
-            $('input[name="dates"]').daterangepicker({
-                singleDatePicker: true,
-                showDropdowns: false,
-                minYear: 1901,
-                maxYear: parseInt(moment().format('YYYY'), 10)
-            });
+        var disabledDates = <?php echo json_encode($reserved_dates); ?>;
+
+        $('input').datepicker({
+            inline: true,
+            showOtherMonths: true,
+            beforeShowDay: function(date) {
+                var string = jQuery.datepicker.formatDate('yy-mm-dd', date);
+                return [disabledDates.indexOf(string) == -1]
+            }
         });
+        // $(function() {
+        //     $('input[name="dates"]').daterangepicker({
+        //         singleDatePicker: true,
+        //         showDropdowns: false,
+        //         minYear: 1901,
+        //         maxYear: parseInt(moment().format('YYYY'), 10)
+        //     });
+        // });
     </script>
 </body>
 

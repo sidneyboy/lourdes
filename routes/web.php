@@ -43,6 +43,9 @@ Route::post('/about_edit_image', 'HomeController@about_edit_image')->name('about
 Route::get('/carousel_active/{id}/{status}', 'HomeController@carousel_active')->name('carousel_active');
 Route::get('/cancel_reservation/{id}/{email}', 'HomeController@cancel_reservation')->name('cancel_reservation');
 Route::get('/accomodation_status/{id}/{status}', 'HomeController@accomodation_status')->name('accomodation_status');
+Route::get('/monthly_earning_report/', 'HomeController@monthly_earning_report')->name('monthly_earning_report');
+Route::get('/yearly_earning_report/', 'HomeController@yearly_earning_report')->name('yearly_earning_report');
+
 
 
 

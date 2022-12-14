@@ -56,7 +56,9 @@ class HomeController extends Controller
         $reserved_monthly = Reservations::whereMonth('created_at', $month)->count();
         $reserved_yearly = Reservations::whereYear('created_at', $year)->count();
 
-        $reservations = Reservations::where('status', 'Paid')->orderBy('id', 'desc')->get();
+        $reservations = Reservations::whereDate('created_at', '>=', $date)
+            ->orderBy('id', 'desc')
+            ->get();
         return view('home', compact('widget'), [
             'message_count' => $message_count,
             'reservation_count' => $reservation_count,
@@ -301,7 +303,7 @@ class HomeController extends Controller
         $reservation_count = Reservations::where('status', 'Pending')->count();
 
 
-        $reservations = Reservations::all();
+        $reservations = Reservations::orderBy('id', 'desc')->get();
         return view('reservations', compact('widget'), [
             'message_count' => $message_count,
             'reservation_count' => $reservation_count,
@@ -335,36 +337,68 @@ class HomeController extends Controller
 
     public function reservation_process_data(Request $request)
     {
-        Reservations::where('id', $request->input('id'))
-            ->update([
-                'payment' => $request->input('amount'),
-                'status' => 'For Final Payment',
-            ]);
+        date_default_timezone_set('Asia/Manila');
+        $date = date('Y-m-d');
+        //return $request->input();
+
+        if ($request->input('amount') == "500") {
+            Reservations::where('id', $request->input('id'))
+                ->update([
+                    'payment' => $request->input('amount'),
+                    'status' => 'Paid Downpayment',
+                    'payment_dates' => $request->input('payment_date'),
+                ]);
+
+            $subject = '';
+            $messages = 'We are happy to tell you that your reservation has been acknowledge and approved. See you at Nikan Magdale Resort';
+            Mail::to($request->input('email'))->send(new Contact_us_mail($subject, $messages));
+
+            return redirect('reservations')->with('success', 'Success');
+        } else if ($request->input('amount') > "500") {
+            Reservations::where('id', $request->input('id'))
+                ->update([
+                    'payment' => $request->input('amount'),
+                    'status' => 'Partial Payment',
+                    'payment_dates' => $request->input('payment_date'),
+                ]);
+
+            $subject = '';
+            $messages = 'We are happy to tell you that your reservation has been acknowledge and approved. See you at Nikan Magdale Resort';
+            Mail::to($request->input('email'))->send(new Contact_us_mail($subject, $messages));
+
+            return redirect('reservations')->with('success', 'Success');
+        } else {
+            return redirect('reservations')->with('success', 'Cannot Proceed. Amount must be equal or greater than 500');
+        }
+      
 
 
-        $subject = '';
-        $messages = 'We are happy to tell you that your reservation has been acknowledge and approved. See you at Nikan Magdale Resort';
-        Mail::to($request->input('email'))->send(new Contact_us_mail($subject, $messages));
-
-        return redirect('reservations')->with('success', 'Success');
     }
 
     public function reservation_process_final_data(Request $request)
     {
+        date_default_timezone_set('Asia/Manila');
+        $date = date('Y-m-d');
         $reservation = Reservations::find($request->input('id'));
 
         $amount = $reservation->payment + $request->input('amount');
-        Reservations::where('id', $request->input('id'))
-            ->update([
-                'payment' => $amount,
-                'status' => 'Paid',
-            ]);
 
-        $subject = '';
-        $messages = 'We are happy to served you. Thank you for staying at Nikan Magdale Resort. See you again!';
-        Mail::to($request->input('email'))->send(new Contact_us_mail($subject, $messages));
+        if ($amount == 6000) {
+            Reservations::where('id', $request->input('id'))
+                ->update([
+                    'payment' => $amount,
+                    'status' => 'Paid',
+                    'payment_dates' => $date,
+                ]);
 
-        return redirect('reservations')->with('success', 'Success');
+            $subject = '';
+            $messages = 'We are happy to served you. Thank you for staying at Nikan Magdale Resort. See you again!';
+            Mail::to($request->input('email'))->send(new Contact_us_mail($subject, $messages));
+
+            return redirect('reservations')->with('success', 'Success');
+        } else {
+            return redirect('reservations')->with('success', 'Error, Final Payment + Partial Payment must be equal to 6000');
+        }
     }
 
     public function cancel_reservation($id, $email)
@@ -390,5 +424,39 @@ class HomeController extends Controller
             ]);
 
         return redirect('accomodation')->with('success', 'Success');
+    }
+
+    public function monthly_earning_report()
+    {
+        date_default_timezone_set('Asia/Manila');
+        $date = date('Y-m-d');
+        $month = date('m');
+        $year = date('Y');
+
+        $reservations = Reservations::where('status', 'Paid')->whereMonth('created_at', $month)->get();
+        $message_count = Contact_us::where('status', 'Pending')->count();
+        $reservation_count = Reservations::where('status', 'Pending')->count();
+        return view('monthly_earning_report', [
+            'reservations' => $reservations,
+            'message_count' => $message_count,
+            'reservation_count' => $reservation_count,
+        ]);
+    }
+
+    public function yearly_earning_report()
+    {
+        date_default_timezone_set('Asia/Manila');
+        $date = date('Y-m-d');
+        $month = date('m');
+        $year = date('Y');
+
+        $reservations = Reservations::where('status', 'Paid')->whereYear('created_at', $year)->get();
+        $message_count = Contact_us::where('status', 'Pending')->count();
+        $reservation_count = Reservations::where('status', 'Pending')->count();
+        return view('yearly_earning_report', [
+            'reservations' => $reservations,
+            'message_count' => $message_count,
+            'reservation_count' => $reservation_count,
+        ]);
     }
 }
