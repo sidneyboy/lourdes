@@ -82,7 +82,7 @@ class HomeController extends Controller
 
         $about_count = About::count();
 
-        return $about = About::all();
+        $about = About::all();
 
 
 
