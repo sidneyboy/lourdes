@@ -82,7 +82,7 @@ class HomeController extends Controller
 
         $about_count = About::count();
 
-        $about = About::all();
+        return $about = About::all();
 
 
 
@@ -140,7 +140,7 @@ class HomeController extends Controller
 
         $message_count = Contact_us::where('status', 'Pending')->count();
         $reservation_count = Reservations::where('status', 'Pending')->count();
-        $carousel = Carousel::all();
+        return $carousel = Carousel::all();
 
         return view('carousel', compact('widget'), [
             'message_count' => $message_count,
