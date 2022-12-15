@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\Contact_us_mail;
+use App\Mail\Cancel_reservations;
 use App\Models\User;
 use App\Models\Type;
 use App\Models\About;
@@ -303,7 +304,7 @@ class HomeController extends Controller
         $reservation_count = Reservations::where('status', 'Pending')->count();
 
 
-        $reservations = Reservations::orderBy('id', 'desc')->get();
+        $reservations = Reservations::orderBy('id', 'desc')->where('status','!=','Cancelled')->get();
         return view('reservations', compact('widget'), [
             'message_count' => $message_count,
             'reservation_count' => $reservation_count,
@@ -411,7 +412,7 @@ class HomeController extends Controller
 
         $subject = '';
         $messages = 'Due to unpaid downpayment your reservation has been cancelled.';
-        Mail::to($email)->send(new Contact_us_mail($subject, $messages));
+        Mail::to($email)->send(new Cancel_reservations($subject, $messages));
 
         return redirect('reservations')->with('success', 'Success');
     }
