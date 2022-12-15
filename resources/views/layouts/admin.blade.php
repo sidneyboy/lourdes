@@ -151,13 +151,43 @@
                 </a>
             </li> --}}
 
-            <li class="nav-item {{ Nav::isRoute('reservations') }}">
+            {{-- <li class="nav-item {{ Nav::isRoute('reservations') }}">
                 <a class="nav-link" href="{{ route('reservations') }}">
                     <i class="bi bi-list-check"></i>
                     <span>{{ __('Reservations') }}</span> <span
                         class="badge badge-light">{{ $reservation_count }}</span>
                 </a>
+            </li> --}}
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities123"
+                    aria-expanded="true" aria-controls="collapseUtilities123">
+                    <i class="fas fa-fw fa-wrench"></i>
+                    <span>Customer List</span>
+                </a>
+                <div id="collapseUtilities123" class="collapse" aria-labelledby="headingUtilities"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="nav-link" style="color:black;" href="{{ route('reservations') }}">
+                            <span>{{ __('Reservations') }}</span> <span
+                                class="badge badge-info">{{ $reservation_count }}</span>
+                        </a>
+                        <a class="nav-link" style="color:black;" href="{{ route('about') }}">
+                            <span>{{ __('Paid Downpayment') }}</span>
+                        </a>
+                        <a class="nav-link" style="color:black;" href="{{ route('carousel') }}">
+                            <span>{{ __('Partial Payment') }}</span>
+                        </a>
+                        <a class="nav-link" style="color:black;" href="{{ route('carousel') }}">
+                            <span>{{ __('Fully Paid') }}</span>
+                        </a>
+                        <a class="nav-link" style="color:black;" href="{{ route('carousel') }}">
+                            <span>{{ __('Cancelled Booking') }}</span>
+                        </a>
+                    </div>
+                </div>
             </li>
+
 
 
             {{-- <li class="nav-item {{ Nav::isRoute('accomodation') }}">

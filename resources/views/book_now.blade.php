@@ -94,8 +94,10 @@
                 <div class="col-md-12">
                     <div class="titlepage">
                         <h2>Book Now</h2>
-                        <h3 style="text-align: left;color:blue;">Note: For booking a reservation, there is a down payment of 500 pesos. The QR code for our G-Cash is shown below. </h3>
-                        <h3 style="text-align: left;color:blue;">Note: Please attach a screenshot of your receipt as a proof of payment.</h3>
+                        <h3 style="text-align: left;color:blue;">Note: For booking a reservation, there is a down
+                            payment of 500 pesos. The QR code for our G-Cash is shown below. </h3>
+                        <h3 style="text-align: left;color:blue;">Note: Please attach a screenshot of your receipt as a
+                            proof of payment.</h3>
                     </div>
                 </div>
             </div>
@@ -118,7 +120,8 @@
                         <input class="contactus" placeholder="First Name" type="text" required name="first_name">
                     </div>
                     <div class="col-md-4">
-                        <input class="contactus" placeholder="Middle Name" type="text" required name="middle_name">
+                        <input class="contactus" placeholder="Middle Name" type="text" required
+                            name="middle_name">
                     </div>
                     <div class="col-md-4">
                         <input class="contactus" placeholder="Last Name" type="text" required name="last_name">
@@ -140,61 +143,31 @@
                         <input type="file" class="contactus" required name="images" required>
                     </div>
                     <div class="col-md-12">
-                        <button class="send_btn float-right" type="submit">Book Now</button>
+                        <p>
+                            Note: A down payment of 500 pesos is non-refundable. Any circumstances may come unexpectedly
+                            but we are sorry to say we have a policy for booking a reservation that has no return, no
+                            exchange.
+                        </p>
+                    </div>
+                    <div class="col-md-12">
+                        <br />
+                        <input type="radio" name="agreement" id="agree" value="agree"
+                            style="transform: scale(2);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I Agree <br /><br />
+
+
+                        <input type="radio" name="agreement" id="not_agree" value="not_agree"
+                            style="transform: scale(2);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I Do Not Agree
+
+                    </div>
+                    <div class="col-md-12">
+                        <button class="send_btn float-right" style="display: none;" id="show_if_trigger" type="submit">Book Now</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
 
-    {{-- <!--  contact -->
-    <div class="contact" id="contact">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="titlepage">
-                        <h2>Contact Us</h2>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <form id="request" class="main_form" action="{{ route('contact_us_process') }}"
-                        method="post">
-                        @csrf
-                        <div class="row">
-                            <div class="col-md-12 ">
-                                <input class="contactus" placeholder="Name" type="text" required name="name">
-                            </div>
-                            <div class="col-md-12">
-                                <input class="contactus" placeholder="Email" type="email" required name="email">
-                            </div>
-                            <div class="col-md-12">
-                                <input class="contactus" placeholder="Phone Number" type="number" required
-                                    name="number">
-                            </div>
-                            <div class="col-md-12">
-                                <textarea class="textarea" placeholder="Message" type="text" required name="message">Message</textarea>
-                            </div>
-                            <div class="col-md-12">
-                                <button class="send_btn" type="submit">Send</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="col-md-6">
-                    <div class="map_main">
-                        <div class="map-responsive">
-                            <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3945.324663935904!2d124.50814381478318!3d8.564747093843758!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x32fff7bad14f4b7f%3A0x70f3fc828a71eaf!2sNikan%20Resort!5e0!3m2!1sen!2sph!4v1670418966530!5m2!1sen!2sph"
-                                width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
-                                referrerpolicy="no-referrer-when-downgrade"></iframe>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
+
 
     <div class="contact" id="faqs">
         <div class="container">
@@ -275,47 +248,10 @@
                                     nikanmagdale.official@gmail.com</a></li>
                         </ul>
                     </div>
-                    {{-- <div class="col-md-4">
-                        <h3>Menu Link</h3>
-                        <ul class="link_menu">
-                            <li class="active"><a href="#">Home</a></li>
-                            <li><a href="about.html"> about</a></li>
-                            <li><a href="room.html">Our Room</a></li>
-                            <li><a href="gallery.html">Gallery</a></li>
-                            <li><a href="blog.html">Blog</a></li>
-                            <li><a href="contact.html">Contact Us</a></li>
-                        </ul>
-                    </div> --}}
-                    {{-- <div class="col-md-4">
-                     <h3>News letter</h3>
-                     <form class="bottom_form">
-                        <input class="enter" placeholder="Enter your email" type="text" name="Enter your email">
-                        <button class="sub_btn">subscribe</button>
-                     </form>
-                     <ul class="social_icon">
-                        <li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-                        <li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
-                        <li><a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
-                        <li><a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a></li>
-                     </ul>
-                  </div> --}}
+
                 </div>
             </div>
-            {{-- <div class="copyright">
-               <div class="container">
-                  <div class="row">
-                     <div class="col-md-10 offset-md-1">
-                        
-                        <p>
-                        © 2019 All Rights Reserved. Design by <a href="https://html.design/"> Free Html Templates</a>
-                        <br><br>
-                        Distributed by <a href="https://themewagon.com/" target="_blank">ThemeWagon</a>
-                        </p>
 
-                     </div>
-                  </div>
-               </div>
-            </div> --}}
         </div>
     </footer>
     <!-- end footer -->
@@ -331,6 +267,14 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script>
         $('input[name="dates"]').daterangepicker();
+
+        $("#agree").click(function() {
+            $('#show_if_trigger').show();
+        });
+
+        $("#not_agree").click(function() {
+            $('#show_if_trigger').hide();
+        });
     </script>
 </body>
 

@@ -57,11 +57,25 @@ class HomeController extends Controller
         $reserved_monthly = Reservations::whereMonth('created_at', $month)->count();
         $reserved_yearly = Reservations::whereYear('created_at', $year)->count();
 
-        $reservations = Reservations::whereDate('created_at', '>=', $date)
-            ->orderBy('id', 'desc')
+        // $reservations = Reservations::whereDate('created_at', '>=', $date)
+        //     ->orderBy('id', 'desc')
+        //     ->get();
+
+        $reservation_month = Reservations::select(
+            DB::raw('month(date_from) as month'),
+            DB::raw('year(date_from) as year'),
+        )->groupBy('month')
             ->get();
+
+        foreach ($reservation_month as $key => $value) {
+            $reservations[$value->month] = Reservations::whereMonth('date_from',$value->month)
+                                            ->where('status','!=','Cancelled')
+                                            ->get();
+        }
+
         return view('home', compact('widget'), [
             'message_count' => $message_count,
+            'reservation_month' => $reservation_month,
             'reservation_count' => $reservation_count,
             'reservation_monthly' => $reservation_monthly,
             'reservation_yearly' => $reservation_yearly,

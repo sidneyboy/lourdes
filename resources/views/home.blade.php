@@ -97,58 +97,35 @@
     </div>
 
     <div class="row">
-
-        <!-- Content Column -->
-        <div class="col-lg-12 mb-12">
-
-            <!-- Project Card Example -->
-            <div class="card shadow mb-12">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Upcoming Customers</h6>
-                </div>
-                <div class="card-body">
-                    <div class="table table-responsive">
-                        <table class="table table-bordered table-hover">
+        @foreach ($reservation_month as $data_month)
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        @php
+                            $dateObj = DateTime::createFromFormat('!m', $data_month->month);
+                            echo $monthName = $dateObj->format('F') ." ". $data_month->year;
+                        @endphp
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
                             <thead>
-                                <tr>
-                                    {{-- <td>Payment</td> --}}
-                                    <td>Status</td>
-                                    <td>First Name</td>
-                                    <td>Middle Name</td>
-                                    <td>Last Name</td>
-                                    <td>Email</td>
-                                    <td>Number</td>
-                                    {{-- <td>Receipt</td> --}}
-                                    <td>Reservation Date</td>
-                                    <td>Date</td>
-                                </tr>
+                                <th>Name</th>
+                                <th>Date of Transaction</th>
+                                <th>Date of Reservation</th>
                             </thead>
                             <tbody>
-                            <tbody>
-                                @foreach ($reservations as $data)
+                                @foreach ($reservations[$data_month->month] as $data)
                                     <tr>
-                                        {{-- <td>
-                                            ₱{{ number_format($data->payment, 2, '.', ',') }}
-                                        </td> --}}
-                                        <td>{{ $data->status }}</td>
-                                        <td>{{ $data->first_name }}</td>
-                                        <td>{{ $data->middle_name }}</td>
-                                        <td>{{ $data->last_name }}</td>
-                                        <td>{{ $data->email }}</td>
-                                        <td>{{ $data->number }}</td>
-
+                                        <td>{{ $data->first_name ." ". $data->middle_name ." ". $data->last_name }}</td>
+                                        <td>{{ date('F j, Y', strtotime($data->date)) }}</td>
                                         <td>{{ date('F j, Y', strtotime($data->date_from)) }}</td>
-
-                                        {{-- <td>{{ $data->date_to }}</td> --}}
-                                        <td>{{ date('F j, Y h:i a', strtotime($data->created_at)) }}</td>
                                     </tr>
                                 @endforeach
-                            </tbody>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-
+        @endforeach
     </div>
 @endsection
