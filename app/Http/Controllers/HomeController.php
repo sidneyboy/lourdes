@@ -304,7 +304,7 @@ class HomeController extends Controller
         $reservation_count = Reservations::where('status', 'Pending')->count();
 
 
-        $reservations = Reservations::orderBy('id', 'desc')->where('status', '!=', 'Cancelled')->get();
+        $reservations = Reservations::orderBy('id', 'desc')->get();
         return view('reservations', compact('widget'), [
             'message_count' => $message_count,
             'reservation_count' => $reservation_count,
@@ -476,7 +476,7 @@ class HomeController extends Controller
         )->groupBy('year')
             ->where('status', '!=', 'Pending')
             ->get();
-            
+
         $message_count = Contact_us::where('status', 'Pending')->count();
         $reservation_count = Reservations::where('status', 'Pending')->count();
         return view('yearly_earning_report', [

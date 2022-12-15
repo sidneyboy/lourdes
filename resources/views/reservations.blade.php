@@ -32,7 +32,7 @@
                         <td>Receipt</td>
                         <td>Reservation Date</td>
                         <td>Date Transacted</td>
-                        <td>Cancel</td>
+                        <td>Cancel Option</td>
                     </tr>
                 </thead>
                 <tbody>
