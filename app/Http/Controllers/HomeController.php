@@ -451,6 +451,16 @@ class HomeController extends Controller
             ->where('status', '!=', 'Pending')
             ->get();
 
+        $reservation_month = Reservations::select(
+            DB::raw('month(created_at) as month'),
+        )->groupBy('month')
+            ->get();
+
+        foreach ($reservation_month as $key => $data) {
+            $reservation_month_data = Reservations::whereMonth('created_at', $data->month)->where('status', 'Cancelled')->count();
+            $cancelled_month[] = $data->month;
+            $cancelled_month_count[] = $reservation_month_data;
+        }
 
         $message_count = Contact_us::where('status', 'Pending')->count();
         $reservation_count = Reservations::where('status', 'Pending')->count();
@@ -458,6 +468,8 @@ class HomeController extends Controller
             'reservations' => $reservations,
             'message_count' => $message_count,
             'reservation_count' => $reservation_count,
+            'cancelled_month' => $cancelled_month,
+            'cancelled_month_count' => $cancelled_month_count,
         ]);
     }
 
@@ -477,12 +489,25 @@ class HomeController extends Controller
             ->where('status', '!=', 'Pending')
             ->get();
 
+        $reservation_year = Reservations::select(
+            DB::raw('year(created_at) as year'),
+        )->groupBy('year')
+            ->get();
+
+        foreach ($reservation_year as $key => $data) {
+            $reservation_year_data = Reservations::whereYear('created_at', $data->year)->where('status', 'Cancelled')->count();
+            $cancelled_year[] = $data->year;
+            $cancelled_year_count[] = $reservation_year_data;
+        }
+
         $message_count = Contact_us::where('status', 'Pending')->count();
         $reservation_count = Reservations::where('status', 'Pending')->count();
         return view('yearly_earning_report', [
             'reservations' => $reservations,
             'message_count' => $message_count,
             'reservation_count' => $reservation_count,
+            'cancelled_year' => $cancelled_year,
+            'cancelled_year_count' => $cancelled_year_count,
         ]);
     }
 }

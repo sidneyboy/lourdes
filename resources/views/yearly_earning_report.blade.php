@@ -17,62 +17,57 @@
     @endif
 
     <div class="row">
-        <div class="card">
-            <div class="card-header">Monthly Earnings</div>
-            <div class="card-body">
-                <div class="table table-responsive">
-                    {{-- <table class="table table-bordered table-hover">
-                        <thead>
-                            <tr>
-                                <td>Payment</td>
-                                <th>Payment Date</th>
-                                <td>First Name</td>
-                                <td>Middle Name</td>
-                                <td>Last Name</td>
-                                <td>Email</td>
-                                <td>Number</td>
-                                <td>Reservation Date</td>
-                                <td>Date</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($reservations as $data)
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">Monthly Earnings</div>
+                <div class="card-body">
+                    <div class="table table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead>
                                 <tr>
-                                    <td>{{ number_format($total_sales,2,".",",") }}</td>
-                                    <td>{{ date('F j, Y', strtotime($data->payment_dates)) }}</td>
-                                    <td>{{ $data->first_name }}</td>
-                                    <td>{{ $data->middle_name }}</td>
-                                    <td>{{ $data->last_name }}</td>
-                                    <td>{{ $data->email }}</td>
-                                    <td>{{ $data->number }}</td>
-                                    <td>{{ date('F j, Y', strtotime($data->date_from)) }}</td>
-                                    <td>{{ date('F j, Y h:i a', strtotime($data->created_at)) }}</td>
+                                    <th>Year</th>
+                                    <th>Total Earnings</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table> --}}
-                    <table class="table table-bordered table-hover">
-                        <thead>
-                            <tr>
-                                <th>Year</th>
-                                <th>Total Earnings</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($reservations as $data)
+                            </thead>
+                            <tbody>
+                                @foreach ($reservations as $data)
+                                    <tr>
+                                        <td>
+                                            {{ $data->year }}
+                                        </td>
+                                        <td>{{ number_format($data['total_sales'], 2, '.', ',') }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">Yearly Cancellations</div>
+                <div class="card-body">
+                    <div class="table table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead>
                                 <tr>
-                                    <td>
-                                        {{ $data->year }}
-                                        {{-- @php
-                                            $dateObj = DateTime::createFromFormat('!m', $data['month']);
-                                            echo $monthName = $dateObj->format('F');
-                                        @endphp --}}
-                                    </td>
-                                    <td>{{ number_format($data['total_sales'], 2, '.', ',') }}</td>
+                                    <th>Year</th>
+                                    <th>Total Cancelled</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @for ($i = 0; $i < count($cancelled_year); $i++)
+                                    <tr>
+                                        <td>
+                                            {{ $cancelled_year[$i] }}
+                                        </td>
+                                        <td>{{ $cancelled_year_count[$i] }}</td>
+                                    </tr>
+                                @endfor
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
