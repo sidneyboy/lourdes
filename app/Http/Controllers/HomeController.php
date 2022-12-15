@@ -12,7 +12,7 @@ use App\Models\Accomodation_images;
 use App\Models\Carousel;
 use App\Models\Contact_us;
 use App\Models\Reservations;
-
+use DB;
 
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
@@ -304,7 +304,7 @@ class HomeController extends Controller
         $reservation_count = Reservations::where('status', 'Pending')->count();
 
 
-        $reservations = Reservations::orderBy('id', 'desc')->where('status','!=','Cancelled')->get();
+        $reservations = Reservations::orderBy('id', 'desc')->where('status', '!=', 'Cancelled')->get();
         return view('reservations', compact('widget'), [
             'message_count' => $message_count,
             'reservation_count' => $reservation_count,
@@ -355,6 +355,19 @@ class HomeController extends Controller
             Mail::to($request->input('email'))->send(new Contact_us_mail($subject, $messages));
 
             return redirect('reservations')->with('success', 'Success');
+        } else if ($request->input('amount') == "6000") {
+            Reservations::where('id', $request->input('id'))
+                ->update([
+                    'payment' => $request->input('amount'),
+                    'status' => 'Paid',
+                    'payment_dates' => $request->input('payment_date'),
+                ]);
+
+            $subject = '';
+            $messages = 'We are happy to tell you that your reservation has been acknowledge and approved. See you at Nikan Magdale Resort';
+            Mail::to($request->input('email'))->send(new Contact_us_mail($subject, $messages));
+
+            return redirect('reservations')->with('success', 'Success');
         } else if ($request->input('amount') > "500") {
             Reservations::where('id', $request->input('id'))
                 ->update([
@@ -371,9 +384,6 @@ class HomeController extends Controller
         } else {
             return redirect('reservations')->with('success', 'Cannot Proceed. Amount must be equal or greater than 500');
         }
-      
-
-
     }
 
     public function reservation_process_final_data(Request $request)
@@ -434,7 +444,14 @@ class HomeController extends Controller
         $month = date('m');
         $year = date('Y');
 
-        $reservations = Reservations::where('status', 'Paid')->whereMonth('created_at', $month)->get();
+        $reservations = Reservations::select(
+            DB::raw('sum(payment) as total_sales'),
+            DB::raw('month(created_at) as month'),
+        )->groupBy('month')
+            ->where('status', '!=', 'Pending')
+            ->get();
+
+
         $message_count = Contact_us::where('status', 'Pending')->count();
         $reservation_count = Reservations::where('status', 'Pending')->count();
         return view('monthly_earning_report', [
@@ -452,6 +469,14 @@ class HomeController extends Controller
         $year = date('Y');
 
         $reservations = Reservations::where('status', 'Paid')->whereYear('created_at', $year)->get();
+
+        $reservations = Reservations::select(
+            DB::raw('sum(payment) as total_sales'),
+            DB::raw('year(created_at) as year'),
+        )->groupBy('year')
+            ->where('status', '!=', 'Pending')
+            ->get();
+            
         $message_count = Contact_us::where('status', 'Pending')->count();
         $reservation_count = Reservations::where('status', 'Pending')->count();
         return view('yearly_earning_report', [
