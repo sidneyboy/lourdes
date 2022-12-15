@@ -31,7 +31,7 @@
                         <td>Number</td>
                         <td>Receipt</td>
                         <td>Reservation Date</td>
-                        <td>Date</td>
+                        <td>Date Transacted</td>
                         <td>Cancel</td>
                     </tr>
                 </thead>
