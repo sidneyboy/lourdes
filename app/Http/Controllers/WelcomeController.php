@@ -14,26 +14,32 @@ class WelcomeController extends Controller
 {
     public function welcome()
     {
-        $room = Accomodation::where('type_id', 'room')->where('status','activated')->get();
-        $meals = Accomodation::where('type_id', 'meals')->where('status','activated')->get();
-        $liqour = Accomodation::where('type_id', 'liqour')->where('status','activated')->get();
+        $room = Accomodation::where('type_id', 'room')->where('status', 'activated')->get();
+        $meals = Accomodation::where('type_id', 'meals')->where('status', 'activated')->get();
+        $liqour = Accomodation::where('type_id', 'liqour')->where('status', 'activated')->get();
 
-        $gallery = Accomodation::where('status','activated')->get();
+        $gallery = Accomodation::where('status', 'activated')->get();
 
         $carousel = Carousel::where('status', 'active')->get();
         $carousel_first = Carousel::where('status', 'active')->orderBy('id', 'desc')->limit(1)->first();
 
         $about = About::orderBy('id', 'desc')->limit(1)->first();
 
-        $reservations_dates = Reservations::where('status','Paid Downpayment')
-                                            ->orWhere('status','Partial Payment')
-                                            ->orWhere('status','Paid')
-                                            ->get();
+        $reservations_dates = Reservations::where('status', 'Paid Downpayment')
+            ->orWhere('status', 'Partial Payment')
+            ->orWhere('status', 'Paid')
+            ->get();
 
 
         // $reserved_dates = array();
-        foreach ($reservations_dates as $key => $value) {
-            $reserved_dates[] = $value->date_from;
+
+
+        if (count($reservations_dates) != 0) {
+            foreach ($reservations_dates as $key => $value) {
+                $reserved_dates[] = $value->date_from;
+            }
+        }else{
+            $reserved_dates[] = '';
         }
 
         return view('index', [
@@ -62,8 +68,8 @@ class WelcomeController extends Controller
             return view('book_now')
                 ->with('date_from', $date_from)
                 ->with('date_to', $date_to);
-        }else{
-            return redirect('welcome')->with('date_error','Date Already Reserved. Please Pick Other Date');
+        } else {
+            return redirect('welcome')->with('date_error', 'Date Already Reserved. Please Pick Other Date');
         }
     }
 

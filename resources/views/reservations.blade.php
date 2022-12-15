@@ -179,6 +179,8 @@
                                     </div>
                                 @elseif($data->status == 'Paid')
                                     <button class="btn btn-success btn-block" disabled>Fully Paid</button>
+                                @elseif($data->status == 'Cancelled')
+                                <button class="btn btn-danger btn-block" disabled>Cancelled</button>
                                 @endif
                             </td>
                             <td>
