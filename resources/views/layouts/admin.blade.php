@@ -151,15 +151,15 @@
                 </a>
             </li> --}}
 
-            {{-- <li class="nav-item {{ Nav::isRoute('reservations') }}">
+            <li class="nav-item {{ Nav::isRoute('reservations') }}">
                 <a class="nav-link" href="{{ route('reservations') }}">
                     <i class="bi bi-list-check"></i>
                     <span>{{ __('Reservations') }}</span> <span
                         class="badge badge-light">{{ $reservation_count }}</span>
                 </a>
-            </li> --}}
+            </li>
 
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities123"
                     aria-expanded="true" aria-controls="collapseUtilities123">
                     <i class="fas fa-fw fa-wrench"></i>
@@ -172,21 +172,21 @@
                             <span>{{ __('Reservations') }}</span> <span
                                 class="badge badge-info">{{ $reservation_count }}</span>
                         </a>
-                        <a class="nav-link" style="color:black;" href="{{ route('about') }}">
+                        <a class="nav-link" style="color:black;" href="{{ route('paid_downpayment') }}">
                             <span>{{ __('Paid Downpayment') }}</span>
                         </a>
-                        <a class="nav-link" style="color:black;" href="{{ route('carousel') }}">
+                        <a class="nav-link" style="color:black;" href="{{ route('partial_payment') }}">
                             <span>{{ __('Partial Payment') }}</span>
                         </a>
-                        <a class="nav-link" style="color:black;" href="{{ route('carousel') }}">
+                        <a class="nav-link" style="color:black;" href="{{ route('full_paid') }}">
                             <span>{{ __('Fully Paid') }}</span>
                         </a>
-                        <a class="nav-link" style="color:black;" href="{{ route('carousel') }}">
+                        <a class="nav-link" style="color:black;" href="{{ route('cancelled') }}">
                             <span>{{ __('Cancelled Booking') }}</span>
                         </a>
                     </div>
                 </div>
-            </li>
+            </li> --}}
 
 
 

@@ -68,9 +68,9 @@ class HomeController extends Controller
             ->get();
 
         foreach ($reservation_month as $key => $value) {
-            $reservations[$value->month] = Reservations::whereMonth('date_from',$value->month)
-                                            ->where('status','!=','Cancelled')
-                                            ->get();
+            $reservations[$value->month] = Reservations::whereMonth('date_from', $value->month)
+                ->where('status', '!=', 'Cancelled')
+                ->get();
         }
 
         return view('home', compact('widget'), [
@@ -320,6 +320,90 @@ class HomeController extends Controller
 
         $reservations = Reservations::orderBy('id', 'desc')->get();
         return view('reservations', compact('widget'), [
+            'message_count' => $message_count,
+            'reservation_count' => $reservation_count,
+            'reservations' => $reservations,
+        ]);
+    }
+
+    public function paid_downpayment()
+    {
+        $users = User::count();
+
+        $widget = [
+            'users' => $users,
+            //...
+        ];
+
+        $message_count = Contact_us::where('status', 'Pending')->count();
+        $reservation_count = Reservations::where('status', 'Pending')->count();
+
+
+        $reservations = Reservations::orderBy('id', 'desc')->where('status', 'Paid Downpayment')->get();
+        return view('paid_downpayment', compact('widget'), [
+            'message_count' => $message_count,
+            'reservation_count' => $reservation_count,
+            'reservations' => $reservations,
+        ]);
+    }
+
+    public function partial_payment()
+    {
+        $users = User::count();
+
+        $widget = [
+            'users' => $users,
+            //...
+        ];
+
+        $message_count = Contact_us::where('status', 'Pending')->count();
+        $reservation_count = Reservations::where('status', 'Pending')->count();
+
+
+        $reservations = Reservations::orderBy('id', 'desc')->where('status', 'Partial Payment')->get();
+        return view('partial_payment', compact('widget'), [
+            'message_count' => $message_count,
+            'reservation_count' => $reservation_count,
+            'reservations' => $reservations,
+        ]);
+    }
+
+    public function full_paid()
+    {
+        $users = User::count();
+
+        $widget = [
+            'users' => $users,
+            //...
+        ];
+
+        $message_count = Contact_us::where('status', 'Pending')->count();
+        $reservation_count = Reservations::where('status', 'Pending')->count();
+
+
+        $reservations = Reservations::orderBy('id', 'desc')->where('status', 'Paid')->get();
+        return view('full_paid', compact('widget'), [
+            'message_count' => $message_count,
+            'reservation_count' => $reservation_count,
+            'reservations' => $reservations,
+        ]);
+    }
+
+    public function cancelled()
+    {
+        $users = User::count();
+
+        $widget = [
+            'users' => $users,
+            //...
+        ];
+
+        $message_count = Contact_us::where('status', 'Pending')->count();
+        $reservation_count = Reservations::where('status', 'Pending')->count();
+
+
+        $reservations = Reservations::orderBy('id', 'desc')->where('status', 'Cancelled')->get();
+        return view('cancelled', compact('widget'), [
             'message_count' => $message_count,
             'reservation_count' => $reservation_count,
             'reservations' => $reservations,

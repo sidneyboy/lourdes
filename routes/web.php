@@ -46,6 +46,11 @@ Route::get('/accomodation_status/{id}/{status}', 'HomeController@accomodation_st
 Route::get('/monthly_earning_report/', 'HomeController@monthly_earning_report')->name('monthly_earning_report');
 Route::get('/yearly_earning_report/', 'HomeController@yearly_earning_report')->name('yearly_earning_report');
 
+Route::get('/paid_downpayment/', 'HomeController@paid_downpayment')->name('paid_downpayment');
+Route::get('/partial_payment/', 'HomeController@partial_payment')->name('partial_payment');
+Route::get('/full_paid/', 'HomeController@full_paid')->name('full_paid');
+Route::get('/cancelled/', 'HomeController@cancelled')->name('cancelled');
+
 
 
 

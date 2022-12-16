@@ -39,7 +39,7 @@
                     @foreach ($reservations as $data)
                         <tr>
                             <td>
-                                {{-- @if ($data->status == 'Pending')
+                                @if ($data->status == 'Pending')
                                     <!-- Button trigger modal -->
                                     <button type="button" class="btn btn-primary" data-toggle="modal"
                                         data-target="#exampleModal{{ $data->id }}">
@@ -181,7 +181,7 @@
                                     <button class="btn btn-success btn-block" disabled>Fully Paid</button>
                                 @elseif($data->status == 'Cancelled')
                                 <button class="btn btn-danger btn-block" disabled>Cancelled</button>
-                                @endif --}}
+                                @endif
                             </td>
                             <td>
                                 {{ number_format($data->payment, 2, '.', ',') }}
