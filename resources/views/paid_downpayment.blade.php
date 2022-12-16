@@ -60,8 +60,9 @@
                                             </button>
 
                                             <!-- Modal -->
-                                            <div class="modal fade" id="exampleModalpayment{{ $data->id }}" tabindex="-1" role="dialog"
-                                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal fade" id="exampleModalpayment{{ $data->id }}"
+                                                tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                                aria-hidden="true">
                                                 <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -98,14 +99,14 @@
                                         </td>
                                         <td>
                                             <!-- Button trigger modal -->
-                                            <button type="button" class="btn btn-sm btn-primary btn-block" data-toggle="modal"
-                                                data-target="#exampleModal{{ $data->id }}">
+                                            <button type="button" class="btn btn-sm btn-primary btn-block"
+                                                data-toggle="modal" data-target="#exampleModal{{ $data->id }}">
                                                 History
                                             </button>
 
                                             <!-- Modal -->
-                                            <div class="modal fade" id="exampleModal{{ $data->id }}" tabindex="-1" role="dialog"
-                                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal fade" id="exampleModal{{ $data->id }}" tabindex="-1"
+                                                role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -129,7 +130,8 @@
                                                                             <td>{{ date('F j, Y h:i a', strtotime($details->created_at)) }}
                                                                             </td>
                                                                             <td>{{ $details->status }}</td>
-                                                                            <td>₱ {{ number_format($details->payment, 2, '.', ',') }}
+                                                                            <td>₱
+                                                                                {{ number_format($details->payment, 2, '.', ',') }}
                                                                                 @php
                                                                                     $total[] = $details->payment;
                                                                                 @endphp
@@ -138,7 +140,14 @@
                                                                     @endforeach
                                                                     <tr>
                                                                         <td colspan="2">Total</td>
-                                                                        <td>₱ {{ number_format(array_sum($total), 2, '.', ',') }}
+                                                                        <td>
+                                                                            @if (isset($total) == 0)
+                                                                                ₱
+                                                                                {{ number_format(0, 2, '.', ',') }}
+                                                                            @else
+                                                                                ₱
+                                                                                {{ number_format(array_sum($total), 2, '.', ',') }}
+                                                                            @endif
                                                                         </td>
                                                                     </tr>
                                                                 </tbody>
@@ -161,7 +170,6 @@
                                             <!-- Button trigger modal -->
                                             <button type="button" class="btn btn-primary" data-toggle="modal"
                                                 data-target="#exampleModal_image{{ $data->id }}">
-                                                {{-- <img src="{{ asset('/storage/'. $data->receipt) }}" class="img img-thumbnail"> --}}
                                                 Gcash Receipt
                                             </button>
 
@@ -191,17 +199,7 @@
                                             </div>
                                         </td>
                                         <td>{{ date('F j, Y', strtotime($data->date_from)) }}</td>
-                                        {{-- <td>{{ $data->date_to }}</td> --}}
                                         <td>{{ date('F j, Y h:i a', strtotime($data->created_at)) }}</td>
-                                        {{-- <td>
-                                            @if ($data->status == 'Pending')
-                                                <a href="{{ url('cancel_reservation', [
-                                                    'id' => $data->id,
-                                                    'email' => $data->email,
-                                                ]) }}"
-                                                    class="btn btn-danger btn-block">Cancel</a>
-                                            @endif
-                                        </td> --}}
                                     </tr>
                                 @endforeach
                             </tbody>
