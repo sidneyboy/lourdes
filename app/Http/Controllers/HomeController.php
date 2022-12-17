@@ -12,6 +12,7 @@ use App\Models\Accomodation_images;
 use App\Models\Carousel;
 use App\Models\Contact_us;
 use App\Models\Reservations;
+use App\Models\Reservations_details;
 use DB;
 
 use Illuminate\Support\Facades\Mail;
@@ -317,13 +318,33 @@ class HomeController extends Controller
         $message_count = Contact_us::where('status', 'Pending')->count();
         $reservation_count = Reservations::where('status', 'Pending')->count();
 
-
-        $reservations = Reservations::orderBy('id', 'desc')->get();
+        $reservations = Reservations::orderBy('id', 'desc')->where('status', 'Pending')->get();
         return view('reservations', compact('widget'), [
             'message_count' => $message_count,
             'reservation_count' => $reservation_count,
             'reservations' => $reservations,
         ]);
+    }
+
+    public function paid_downpayment_proecss($id, $email)
+    {
+
+        Reservations::where('id', $id)
+            ->update(['status' => 'Paid Downpayment']);
+
+        $new = new Reservations_details([
+            'reservation_id' => $id,
+            'payment' => 500,
+            'status' => 'Paid Downpayment',
+        ]);
+
+        $new->save();
+
+        $subject = '';
+        $messages = 'We are happy to tell you that your reservation has been acknowledge and approved. See you at Nikan Magdale Resort';
+        Mail::to($email)->send(new Contact_us_mail($subject, $messages));
+
+        return redirect('paid_downpayment')->with('success', 'Success');
     }
 
     public function paid_downpayment()
@@ -443,42 +464,60 @@ class HomeController extends Controller
         if ($request->input('amount') == "500") {
             Reservations::where('id', $request->input('id'))
                 ->update([
-                    'payment' => $request->input('amount'),
                     'status' => 'Paid Downpayment',
-                    'payment_dates' => $request->input('payment_date'),
                 ]);
+
+            $new = new Reservations_details([
+                'reservation_id' => $request->input('id'),
+                'payment' => str_replace(',', '', $request->input('amount')),
+                'status' => 'Paid Downpayment',
+            ]);
+
+            $new->save();
 
             $subject = '';
             $messages = 'We are happy to tell you that your reservation has been acknowledge and approved. See you at Nikan Magdale Resort';
             Mail::to($request->input('email'))->send(new Contact_us_mail($subject, $messages));
 
-            return redirect('reservations')->with('success', 'Success');
+            return redirect('paid_downpayment')->with('success', 'Success');
         } else if ($request->input('amount') == "6000") {
             Reservations::where('id', $request->input('id'))
                 ->update([
-                    'payment' => $request->input('amount'),
                     'status' => 'Paid',
-                    'payment_dates' => $request->input('payment_date'),
                 ]);
+
+            $new = new Reservations_details([
+                'reservation_id' => $request->input('id'),
+                'payment' => str_replace(',', '', $request->input('amount')),
+                'status' => 'Paid',
+            ]);
+
+            $new->save();
 
             $subject = '';
             $messages = 'We are happy to tell you that your reservation has been acknowledge and approved. See you at Nikan Magdale Resort';
             Mail::to($request->input('email'))->send(new Contact_us_mail($subject, $messages));
 
-            return redirect('reservations')->with('success', 'Success');
+            return redirect('full_paid')->with('success', 'Success');
         } else if ($request->input('amount') > "500") {
             Reservations::where('id', $request->input('id'))
                 ->update([
-                    'payment' => $request->input('amount'),
                     'status' => 'Partial Payment',
-                    'payment_dates' => $request->input('payment_date'),
                 ]);
+
+            $new = new Reservations_details([
+                'reservation_id' => $request->input('id'),
+                'payment' => str_replace(',', '', $request->input('amount')),
+                'status' => 'Partial Payment',
+            ]);
+
+            $new->save();
 
             $subject = '';
             $messages = 'We are happy to tell you that your reservation has been acknowledge and approved. See you at Nikan Magdale Resort';
             Mail::to($request->input('email'))->send(new Contact_us_mail($subject, $messages));
 
-            return redirect('reservations')->with('success', 'Success');
+            return redirect('partial_payment')->with('success', 'Success');
         } else {
             return redirect('reservations')->with('success', 'Cannot Proceed. Amount must be equal or greater than 500');
         }
@@ -522,7 +561,7 @@ class HomeController extends Controller
         $messages = 'Due to unpaid downpayment your reservation has been cancelled.';
         Mail::to($email)->send(new Cancel_reservations($subject, $messages));
 
-        return redirect('reservations')->with('success', 'Success');
+        return redirect('cancelled')->with('success', 'Success');
     }
 
     public function accomodation_status($id, $status)
@@ -607,5 +646,48 @@ class HomeController extends Controller
             'cancelled_year' => $cancelled_year,
             'cancelled_year_count' => $cancelled_year_count,
         ]);
+    }
+
+    public function reservation_payment_process(Request $request)
+    {
+        $sum_payment = Reservations_details::where('reservation_id', $request->input('id'))
+            ->sum('payment');
+
+        $total_payment = $sum_payment + str_replace(',', '', $request->input('amount'));
+
+        if ($total_payment == "6000") {
+            Reservations::where('id', $request->input('id'))
+                ->update(['status' => 'Paid']);
+
+            $new = new Reservations_details([
+                'reservation_id' => $request->input('id'),
+                'payment' => str_replace(',', '', $request->input('amount')),
+                'status' => 'Paid',
+            ]);
+
+            $new->save();
+
+            $subject = '';
+            $messages = 'We are happy to served you. Thank you for staying at Nikan Magdale Resort. See you again!';
+            Mail::to($request->input('email'))->send(new Contact_us_mail($subject, $messages));
+
+            return redirect('full_paid')->with('success', 'Success');
+        } else if ($total_payment < "6000") {
+            Reservations::where('id', $request->input('id'))
+                ->update(['status' => 'Partial Payment']);
+
+            $new = new Reservations_details([
+                'reservation_id' => $request->input('id'),
+                'payment' => str_replace(',', '', $request->input('amount')),
+                'status' => 'Partial Payment',
+            ]);
+
+            $new->save();
+            return redirect('partial_payment')->with('success', 'Success');
+        } elseif ($total_payment == 0) {
+            return redirect('partial_payment')->with('error', 'Cannot Process');
+        } else {
+            return redirect('paid_downpayment')->with('error', 'Total payment must not be greater than ₱ 6,000.00');
+        }
     }
 }

@@ -18,9 +18,11 @@ class Reservations extends Model
         'receipt',
         'status',
         'date_from',
-        'date_to',
         'date',
-        'payment',
-        'payment_dates',
     ];
+
+    public function reservation_details()
+    {
+        return $this->hasMany('App\Models\Reservations_details', 'reservation_id');
+    }
 }

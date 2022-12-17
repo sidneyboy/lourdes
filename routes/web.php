@@ -51,7 +51,8 @@ Route::get('/partial_payment/', 'HomeController@partial_payment')->name('partial
 Route::get('/full_paid/', 'HomeController@full_paid')->name('full_paid');
 Route::get('/cancelled/', 'HomeController@cancelled')->name('cancelled');
 
-
+Route::get('/paid_downpayment_proecss/{id}/{email}', 'HomeController@paid_downpayment_proecss')->name('paid_downpayment_proecss');
+Route::post('/reservation_payment_process/', 'HomeController@reservation_payment_process')->name('reservation_payment_process');
 
 
 

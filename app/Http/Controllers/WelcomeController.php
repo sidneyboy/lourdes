@@ -96,7 +96,6 @@ class WelcomeController extends Controller
             'number' => $request->input('number'),
             'receipt' => $imageName,
             'date_from' => $request->input('date_from'),
-            'date_to' => $request->input('date_to'),
             'date' => $date,
             'status' => 'Pending',
         ]);

@@ -151,15 +151,15 @@
                 </a>
             </li> --}}
 
-            <li class="nav-item {{ Nav::isRoute('reservations') }}">
+            {{-- <li class="nav-item {{ Nav::isRoute('reservations') }}">
                 <a class="nav-link" href="{{ route('reservations') }}">
                     <i class="bi bi-list-check"></i>
                     <span>{{ __('Reservations') }}</span> <span
                         class="badge badge-light">{{ $reservation_count }}</span>
                 </a>
-            </li>
+            </li> --}}
 
-            {{-- <li class="nav-item">
+            <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities123"
                     aria-expanded="true" aria-controls="collapseUtilities123">
                     <i class="fas fa-fw fa-wrench"></i>
@@ -186,7 +186,7 @@
                         </a>
                     </div>
                 </div>
-            </li> --}}
+            </li>
 
 
 
