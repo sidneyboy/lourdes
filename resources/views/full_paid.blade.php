@@ -28,7 +28,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">Full Paid</div>
+                <div class="card-header">Fully Paid</div>
                 <div class="card-body">
                     <div class="table table-responsive">
                         <table class="table table-bordered table-hover table-sm">
@@ -50,7 +50,7 @@
                             <tbody>
                                 @foreach ($reservations as $data)
                                     <tr>
-                                        <td>Full Paid</td>
+                                        <td>Fully Paid</td>
                 
                                         <td>
                                             <!-- Button trigger modal -->
