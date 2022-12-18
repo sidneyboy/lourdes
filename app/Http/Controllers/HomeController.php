@@ -581,7 +581,7 @@ class HomeController extends Controller
         $month = date('m');
         $year = date('Y');
 
-        $reservations = Reservations::select(
+        $reservations = Reservations_details::select(
             DB::raw('sum(payment) as total_sales'),
             DB::raw('month(created_at) as month'),
         )->groupBy('month')
@@ -619,7 +619,7 @@ class HomeController extends Controller
 
         $reservations = Reservations::where('status', 'Paid')->whereYear('created_at', $year)->get();
 
-        $reservations = Reservations::select(
+        $reservations = Reservations_details::select(
             DB::raw('sum(payment) as total_sales'),
             DB::raw('year(created_at) as year'),
         )->groupBy('year')
