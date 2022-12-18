@@ -52,8 +52,8 @@ class HomeController extends Controller
         $message_count = Contact_us::where('status', 'Pending')->count();
         $reservation_count = Reservations::where('status', 'Pending')->count();
 
-        $reservation_monthly = Reservations::whereMonth('created_at', $month)->sum('payment');
-        $reservation_yearly = Reservations::whereYear('created_at', $year)->sum('payment');
+        $reservation_monthly = Reservations_details::whereMonth('created_at', $month)->sum('payment');
+        $reservation_yearly = Reservations_details::whereYear('created_at', $year)->sum('payment');
 
         $reserved_monthly = Reservations::whereMonth('created_at', $month)->count();
         $reserved_yearly = Reservations::whereYear('created_at', $year)->count();
@@ -687,7 +687,7 @@ class HomeController extends Controller
         } elseif ($total_payment == 0) {
             return redirect('partial_payment')->with('error', 'Cannot Process');
         } else {
-            return redirect('paid_downpayment')->with('error', 'Total payment must not be greater than ₱ 6,000.00');
+            return redirect('partial_payment')->with('error', 'Total payment must not be greater than ₱ 6,000.00');
         }
     }
 }

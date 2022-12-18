@@ -134,7 +134,6 @@
                                                                                     $total[] = $details->payment;
                                                                                 @endphp
                                                                             </td>
-
                                                                         </tr>
                                                                     @endforeach
                                                                     <tr>
