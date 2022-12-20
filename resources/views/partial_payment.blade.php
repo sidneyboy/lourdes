@@ -141,8 +141,14 @@
                                                                     @endforeach
                                                                     <tr>
                                                                         <td colspan="2">Total</td>
-                                                                        <td>₱
-                                                                            {{ number_format(array_sum($total), 2, '.', ',') }}
+                                                                        <td>
+                                                                            @if (isset($total) == 0)
+                                                                                ₱
+                                                                                {{ number_format(0, 2, '.', ',') }}
+                                                                            @else
+                                                                                ₱
+                                                                                {{ number_format(array_sum($total), 2, '.', ',') }}
+                                                                            @endif
                                                                         </td>
                                                                     </tr>
                                                                 </tbody>

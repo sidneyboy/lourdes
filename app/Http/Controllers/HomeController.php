@@ -66,6 +66,7 @@ class HomeController extends Controller
             DB::raw('month(date_from) as month'),
             DB::raw('year(date_from) as year'),
         )->groupBy('month')
+         ->orderBy('created_at')
             ->get();
 
         foreach ($reservation_month as $key => $value) {
