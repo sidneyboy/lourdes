@@ -25,4 +25,11 @@ class Reservations extends Model
     {
         return $this->hasMany('App\Models\Reservations_details', 'reservation_id');
     }
+
+    public function reservation_latest()
+    {
+        return $this->hasOne('App\Models\Reservations_details', 'reservation_id')->latest();
+    }
+    
+
 }

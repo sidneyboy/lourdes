@@ -576,37 +576,63 @@ class HomeController extends Controller
 
     public function monthly_earning_report()
     {
+
+        // return 'diri ang focus apil ang yearly';
         date_default_timezone_set('Asia/Manila');
         $date = date('Y-m-d');
         $month = date('m');
         $year = date('Y');
 
-        $reservations = Reservations_details::select(
-            DB::raw('sum(payment) as total_sales'),
-            DB::raw('month(created_at) as month'),
-        )->groupBy('month')
+        // $reservations = Reservations_details::select(
+        //     DB::raw('sum(payment) as total_sales'),
+        //     DB::raw('month(created_at) as month'),
+        // )->groupBy('month')
+        //     ->where('status', '!=', 'Pending')
+        //     ->get();
+
+        // $reservation_month = Reservations::select(
+        //     DB::raw('month(created_at) as month'),
+        // )->groupBy('month')
+        //     ->get();
+
+        // foreach ($reservation_month as $key => $data) {
+        //     $reservation_month_data = Reservations::whereMonth('created_at', $data->month)->where('status', 'Cancelled')->count();
+        //     $cancelled_month[] = $data->month;
+        //     $cancelled_month_count[] = $reservation_month_data;
+        // }
+
+        $reservations = Reservations::whereMonth('created_at', $month)
             ->where('status', '!=', 'Pending')
+            ->where('status', '!=', 'Cancelled')
             ->get();
 
-        $reservation_month = Reservations::select(
-            DB::raw('month(created_at) as month'),
-        )->groupBy('month')
-            ->get();
-
-        foreach ($reservation_month as $key => $data) {
-            $reservation_month_data = Reservations::whereMonth('created_at', $data->month)->where('status', 'Cancelled')->count();
-            $cancelled_month[] = $data->month;
-            $cancelled_month_count[] = $reservation_month_data;
+        foreach ($reservations as $key => $data) {
+            $total[$data->id] = Reservations_details::where('reservation_id', $data->id)
+                ->sum('payment');
         }
+
+        $cancelled = Reservations::whereMonth('created_at', $month)
+            ->where('status', 'Cancelled')
+            ->get();
+
+        $reservation_paid = Reservations::where('status','Paid')->count();
+        $reservation_reserved = Reservations::where('status','!=','Cancelled')
+                                              ->where('status','!=','Paid')
+                                              ->where('status','!=','Pending')
+                                              ->count();
+
+
 
         $message_count = Contact_us::where('status', 'Pending')->count();
         $reservation_count = Reservations::where('status', 'Pending')->count();
         return view('monthly_earning_report', [
             'reservations' => $reservations,
+            'total' => $total,
+            'reservation_paid' => $reservation_paid,
+            'reservation_reserved' => $reservation_reserved,
             'message_count' => $message_count,
             'reservation_count' => $reservation_count,
-            'cancelled_month' => $cancelled_month,
-            'cancelled_month_count' => $cancelled_month_count,
+            'cancelled' => $cancelled,
         ]);
     }
 
