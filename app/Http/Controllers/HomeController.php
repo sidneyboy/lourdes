@@ -66,7 +66,7 @@ class HomeController extends Controller
             DB::raw('month(date_from) as month'),
             DB::raw('year(date_from) as year'),
         )->groupBy('month')
-         ->orderBy('created_at')
+            ->orderBy('created_at')
             ->get();
 
         foreach ($reservation_month as $key => $value) {
@@ -584,43 +584,35 @@ class HomeController extends Controller
         $month = date('m');
         $year = date('Y');
 
-        // $reservations = Reservations_details::select(
-        //     DB::raw('sum(payment) as total_sales'),
-        //     DB::raw('month(created_at) as month'),
-        // )->groupBy('month')
-        //     ->where('status', '!=', 'Pending')
-        //     ->get();
-
-        // $reservation_month = Reservations::select(
-        //     DB::raw('month(created_at) as month'),
-        // )->groupBy('month')
-        //     ->get();
-
-        // foreach ($reservation_month as $key => $data) {
-        //     $reservation_month_data = Reservations::whereMonth('created_at', $data->month)->where('status', 'Cancelled')->count();
-        //     $cancelled_month[] = $data->month;
-        //     $cancelled_month_count[] = $reservation_month_data;
-        // }
+        $cancelled = Reservations::select(
+            DB::raw("(DATE_FORMAT(created_at, '%d-%m-%Y')) as date"),
+            DB::raw('count(*) as count')
+        )
+            ->orderBy('created_at')
+            ->groupBy(DB::raw("DATE_FORMAT(created_at, '%d-%m-%Y')"))
+            ->where('status', 'Cancelled')
+            ->get();
 
         $reservations = Reservations::whereMonth('created_at', $month)
             ->where('status', '!=', 'Pending')
             ->where('status', '!=', 'Cancelled')
             ->get();
 
-        foreach ($reservations as $key => $data) {
-            $total[$data->id] = Reservations_details::where('reservation_id', $data->id)
-                ->sum('payment');
+        if (count($reservations) != 0) {
+            foreach ($reservations as $key => $data) {
+                $total[$data->id] = Reservations_details::where('reservation_id', $data->id)
+                    ->sum('payment');
+            }
+        } else {
+            $total[] = '';
         }
 
-        $cancelled = Reservations::whereMonth('created_at', $month)
-            ->where('status', 'Cancelled')
-            ->get();
 
-        $reservation_paid = Reservations::where('status','Paid')->count();
-        $reservation_reserved = Reservations::where('status','!=','Cancelled')
-                                              ->where('status','!=','Paid')
-                                              ->where('status','!=','Pending')
-                                              ->count();
+        $reservation_paid = Reservations::where('status', 'Paid')->count();
+        $reservation_reserved = Reservations::where('status', '!=', 'Cancelled')
+            ->where('status', '!=', 'Paid')
+            ->where('status', '!=', 'Pending')
+            ->count();
 
 
 
@@ -644,34 +636,48 @@ class HomeController extends Controller
         $month = date('m');
         $year = date('Y');
 
-        $reservations = Reservations::where('status', 'Paid')->whereYear('created_at', $year)->get();
+        $cancelled = Reservations::select(
+            DB::raw("(DATE_FORMAT(created_at, '%d-%m-%Y')) as date"),
+            DB::raw('count(*) as count')
+        )
+            ->orderBy('created_at')
+            ->groupBy(DB::raw("DATE_FORMAT(created_at, '%d-%m-%Y')"))
+            ->where('status', 'Cancelled')
+            ->get();
 
-        $reservations = Reservations_details::select(
-            DB::raw('sum(payment) as total_sales'),
-            DB::raw('year(created_at) as year'),
-        )->groupBy('year')
+        $reservations = Reservations::whereYear('created_at', $year)
             ->where('status', '!=', 'Pending')
+            ->where('status', '!=', 'Cancelled')
             ->get();
 
-        $reservation_year = Reservations::select(
-            DB::raw('year(created_at) as year'),
-        )->groupBy('year')
-            ->get();
-
-        foreach ($reservation_year as $key => $data) {
-            $reservation_year_data = Reservations::whereYear('created_at', $data->year)->where('status', 'Cancelled')->count();
-            $cancelled_year[] = $data->year;
-            $cancelled_year_count[] = $reservation_year_data;
+        if (count($reservations) != 0) {
+            foreach ($reservations as $key => $data) {
+                $total[$data->id] = Reservations_details::where('reservation_id', $data->id)
+                    ->sum('payment');
+            }
+        } else {
+            $total[] = '';
         }
+
+
+        $reservation_paid = Reservations::where('status', 'Paid')->count();
+        $reservation_reserved = Reservations::where('status', '!=', 'Cancelled')
+            ->where('status', '!=', 'Paid')
+            ->where('status', '!=', 'Pending')
+            ->count();
+
+
 
         $message_count = Contact_us::where('status', 'Pending')->count();
         $reservation_count = Reservations::where('status', 'Pending')->count();
         return view('yearly_earning_report', [
             'reservations' => $reservations,
+            'total' => $total,
+            'reservation_paid' => $reservation_paid,
+            'reservation_reserved' => $reservation_reserved,
             'message_count' => $message_count,
             'reservation_count' => $reservation_count,
-            'cancelled_year' => $cancelled_year,
-            'cancelled_year_count' => $cancelled_year_count,
+            'cancelled' => $cancelled,
         ]);
     }
 

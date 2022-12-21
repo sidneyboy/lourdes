@@ -27,9 +27,6 @@
                                 <h1> {{ $reservation_paid }}</h1>
                             </div>
                         </div>
-                        {{-- <div class="col-auto">
-                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
-                        </div> --}}
                     </div>
                 </div>
             </div>
@@ -92,7 +89,7 @@
                                 @foreach ($reservations as $data)
                                     <tr>
                                         <td>
-                                            {{ date('F j, Y', strtotime($data->created_at)) }}
+                                            {{ date('F', strtotime($data->created_at)) }}
                                             {{-- @php
                                                 $dateObj = DateTime::createFromFormat('!m', $data->created_at);
                                                 echo $monthName = $dateObj->format('F');
@@ -114,7 +111,7 @@
                 </div>
             </div>
         </div>
-        {{-- <div class="col-md-12">
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-header">Monthly Cancellations</div>
                 <div class="card-body">
@@ -123,14 +120,24 @@
                             <thead>
                                 <tr>
                                     <th>Month</th>
-                                    <th>Total Cancelled</th>
+                                    <th>Count</th>
+                                    <th>Total Compensation</th>
                                 </tr>
                             </thead>
+                            <tbody>
+                                @foreach ($cancelled as $data)
+                                    <tr>
+                                        <td>{{ date('F j, Y', strtotime($data->date)) }}</td>
+                                        <td>{{ $data->count }}</td>
+                                        <td>₱ {{ number_format($data->count*500, 2, '.', ',') }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-        </div> --}}
+        </div>
 
     </div>
 @endsection
