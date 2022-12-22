@@ -550,17 +550,17 @@ class HomeController extends Controller
         }
     }
 
-    public function cancel_reservation($id, $email)
+    public function cancel_reservation(Request $request)
     {
 
-        Reservations::where('id', $id)
+        Reservations::where('id', $request->input('id'))
             ->update([
                 'status' => 'Cancelled',
             ]);
 
         $subject = '';
-        $messages = 'Due to unpaid downpayment your reservation has been cancelled.';
-        Mail::to($email)->send(new Cancel_reservations($subject, $messages));
+        $messages = $request->input('cancel_description');
+        Mail::to($request->input('email'))->send(new Cancel_reservations($subject, $messages));
 
         return redirect('cancelled')->with('success', 'Success');
     }
