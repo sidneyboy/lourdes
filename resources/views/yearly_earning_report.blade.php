@@ -98,8 +98,13 @@
 
                                         <td>{{ $data->first_name . ' ' . $data->middle_name . ' ' . $data->last_name }}</td>
                                         <td>{{ date('F j, Y', strtotime($data->date_from)) }}</td>
-                                        <td><span
-                                                class="badge badge-success btn-block">{{ $data->reservation_latest->status }}</span>
+                                        <td>
+                                            @if ($data->reservation_latest)
+                                                <span
+                                                    class="badge badge-success btn-block">{{ $data->reservation_latest->status }}</span>
+                                            @else
+                                                None
+                                            @endif
                                         </td>
                                         <td>₱ {{ number_format($total[$data->id], 2, '.', ',') }}</td>
 

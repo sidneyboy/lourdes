@@ -218,42 +218,45 @@
                                         </td>
                                         <td>
                                             <button type="button" class="btn btn-sm btn-block btn-primary"
-                                                    data-toggle="modal" data-target="#exampleModal">
-                                                    Cancel
-                                                </button>
+                                                data-toggle="modal"
+                                                data-target="#exampleModalcancelled{{ $data->id }}">
+                                                Cancel
+                                            </button>
 
-                                                <!-- Modal -->
-                                                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
-                                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <button type="button" class="close"
-                                                                    data-dismiss="modal" aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                </button>
-                                                            </div>
-                                                            <form action="{{ route('cancel_reservation') }}"
-                                                                method="post">
-                                                                @csrf
-                                                                <div class="modal-body">
-                                                                    <textarea name="cancel_description" class="form-control" cols="30" rows="10"></textarea>
-
-                                                                    <input type="hidden" name="id"
-                                                                        value="{{ $data->id }}">
-                                                                    <input type="hidden" name="email"
-                                                                        value="{{ $data->email }}">
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="button" class="btn btns-sm btn-secondary"
-                                                                        data-dismiss="modal">Close</button>
-                                                                    <button type="button" class="btn btns-sm btn-primary">Save
-                                                                        changes</button>
-                                                                </div>
-                                                            </form>
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="exampleModalcancelled{{ $data->id }}"
+                                                tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                                aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
                                                         </div>
+                                                        <form action="{{ route('cancel_reservation') }}" method="post">
+                                                            @csrf
+                                                            <div class="modal-body">
+                                                                <label for="">Reason</label>
+                                                                <textarea name="cancel_description" class="form-control" cols="30" rows="10"></textarea>
+
+                                                                <input type="hidden" name="id"
+                                                                    value="{{ $data->id }}">
+                                                                <input type="hidden" name="email"
+                                                                    value="{{ $data->email }}">
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btns-sm btn-secondary"
+                                                                    data-dismiss="modal">Close</button>
+                                                                <button type="submit"
+                                                                    class="btn btns-sm btn-primary">Save
+                                                                    changes</button>
+                                                            </div>
+                                                        </form>
                                                     </div>
                                                 </div>
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach
