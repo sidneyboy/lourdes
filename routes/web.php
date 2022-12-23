@@ -54,7 +54,8 @@ Route::get('/cancelled/', 'HomeController@cancelled')->name('cancelled');
 Route::get('/paid_downpayment_proecss/{id}/{email}', 'HomeController@paid_downpayment_proecss')->name('paid_downpayment_proecss');
 Route::post('/reservation_payment_process/', 'HomeController@reservation_payment_process')->name('reservation_payment_process');
 
-
+Route::get('/monthly_earning_print/', 'HomeController@monthly_earning_print')->name('monthly_earning_print');
+Route::get('/yearly_earning_print/', 'HomeController@yearly_earning_print')->name('yearly_earning_print');
 
 
 Route::post('/carousel_process', 'HomeController@carousel_process')->name('carousel_process');

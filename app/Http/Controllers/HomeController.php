@@ -629,6 +629,58 @@ class HomeController extends Controller
         ]);
     }
 
+    public function monthly_earning_print()
+    {
+        date_default_timezone_set('Asia/Manila');
+        $date = date('Y-m-d');
+        $month = date('m');
+        $year = date('Y');
+
+        $cancelled = Reservations::select(
+            DB::raw("(DATE_FORMAT(created_at, '%d-%m-%Y')) as date"),
+            DB::raw('count(*) as count')
+        )
+            ->orderBy('created_at')
+            ->groupBy(DB::raw("DATE_FORMAT(created_at, '%d-%m-%Y')"))
+            ->where('status', 'Cancelled')
+            ->get();
+
+        $reservations = Reservations::whereMonth('created_at', $month)
+            ->where('status', '!=', 'Pending')
+            ->where('status', '!=', 'Cancelled')
+            ->get();
+
+        if (count($reservations) != 0) {
+            foreach ($reservations as $key => $data) {
+                $total[$data->id] = Reservations_details::where('reservation_id', $data->id)
+                    ->sum('payment');
+            }
+        } else {
+            $total[] = '';
+        }
+
+
+        $reservation_paid = Reservations::where('status', 'Paid')->count();
+        $reservation_reserved = Reservations::where('status', '!=', 'Cancelled')
+            ->where('status', '!=', 'Paid')
+            ->where('status', '!=', 'Pending')
+            ->count();
+
+
+
+        $message_count = Contact_us::where('status', 'Pending')->count();
+        $reservation_count = Reservations::where('status', 'Pending')->count();
+        return view('monthly_earning_print', [
+            'reservations' => $reservations,
+            'total' => $total,
+            'reservation_paid' => $reservation_paid,
+            'reservation_reserved' => $reservation_reserved,
+            'message_count' => $message_count,
+            'reservation_count' => $reservation_count,
+            'cancelled' => $cancelled,
+        ]);
+    }
+
     public function yearly_earning_report()
     {
         date_default_timezone_set('Asia/Manila');
@@ -671,6 +723,58 @@ class HomeController extends Controller
         $message_count = Contact_us::where('status', 'Pending')->count();
         $reservation_count = Reservations::where('status', 'Pending')->count();
         return view('yearly_earning_report', [
+            'reservations' => $reservations,
+            'total' => $total,
+            'reservation_paid' => $reservation_paid,
+            'reservation_reserved' => $reservation_reserved,
+            'message_count' => $message_count,
+            'reservation_count' => $reservation_count,
+            'cancelled' => $cancelled,
+        ]);
+    }
+
+    public function yearly_earning_print()
+    {
+        date_default_timezone_set('Asia/Manila');
+        $date = date('Y-m-d');
+        $month = date('m');
+        $year = date('Y');
+
+        $cancelled = Reservations::select(
+            DB::raw("(DATE_FORMAT(created_at, '%d-%m-%Y')) as date"),
+            DB::raw('count(*) as count')
+        )
+            ->orderBy('created_at')
+            ->groupBy(DB::raw("DATE_FORMAT(created_at, '%d-%m-%Y')"))
+            ->where('status', 'Cancelled')
+            ->get();
+
+        $reservations = Reservations::whereYear('created_at', $year)
+            ->where('status', '!=', 'Pending')
+            ->where('status', '!=', 'Cancelled')
+            ->get();
+
+        if (count($reservations) != 0) {
+            foreach ($reservations as $key => $data) {
+                $total[$data->id] = Reservations_details::where('reservation_id', $data->id)
+                    ->sum('payment');
+            }
+        } else {
+            $total[] = '';
+        }
+
+
+        $reservation_paid = Reservations::where('status', 'Paid')->count();
+        $reservation_reserved = Reservations::where('status', '!=', 'Cancelled')
+            ->where('status', '!=', 'Paid')
+            ->where('status', '!=', 'Pending')
+            ->count();
+
+
+
+        $message_count = Contact_us::where('status', 'Pending')->count();
+        $reservation_count = Reservations::where('status', 'Pending')->count();
+        return view('yearly_earning_print', [
             'reservations' => $reservations,
             'total' => $total,
             'reservation_paid' => $reservation_paid,

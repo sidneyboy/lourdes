@@ -114,6 +114,9 @@
                         </table>
                     </div>
                 </div>
+                <div class="card-footer">
+                    <a href="{{ url('yearly_earning_print') }}" style="float-right btn btn-sm btn-info">Print</a>
+                </div>
             </div>
         </div>
         <div class="col-md-12">
@@ -134,7 +137,7 @@
                                     <tr>
                                         <td>{{ date('F j, Y', strtotime($data->date)) }}</td>
                                         <td>{{ $data->count }}</td>
-                                        <td>₱ {{ number_format($data->count*500, 2, '.', ',') }}</td>
+                                        <td>₱ {{ number_format($data->count * 500, 2, '.', ',') }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>

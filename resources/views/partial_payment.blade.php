@@ -28,7 +28,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">Patial Payment</div>
+                <div class="card-header">Partial Payment</div>
                 <div class="card-body">
                     <div class="table table-responsive">
                         <table class="table table-bordered table-hover table-sm">
@@ -41,13 +41,13 @@
                                     <td>Information</td>
                                     <td>Payment</td>
                                     <td>Transaction</td>
-                                    <td>Cancel Option</td>
+                                    {{-- <td>Cancel Option</td> --}}
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($reservations as $data)
                                     <tr>
-                                        <td>Confirmed</td>
+                                        <td>Partial Payment</td>
                                         <td>{{ $data->first_name }}</td>
                                         <td>{{ $data->middle_name }}</td>
                                         <td>{{ $data->last_name }}</td>
@@ -125,12 +125,48 @@
                                             </div>
                                         </td>
                                         <td>
-                                            {{-- <a href="{{ url('paid_downpayment_proecss', [
-                                                'id' => $data->id,
-                                                'email' => $data->email,
-                                            ]) }}"
-                                                class="btn btn-success btn-block btn-sm"
-                                                style="margin-bottom: 10px;">Confirm</a> --}}
+                                            <!-- Button trigger modal -->
+                                            <button type="button" style="margin-bottom: 10px;"
+                                                class="btn btn-sm btn-success btn-block" data-toggle="modal"
+                                                data-target="#exampleModalhistory{{ $data->id }}">
+                                                History
+                                            </button>
+
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="exampleModalhistory{{ $data->id }}"
+                                                tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                                aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <table class="table table-bordered table-sm">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Date</th>
+                                                                        <th>Amount</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @foreach ($data->reservation_details as $details)
+                                                                        <tr>
+                                                                            <td>{{ date('F j, Y', strtotime($details->created_at)) }}
+                                                                            </td>
+                                                                            <td>{{ number_format($details->payment, 2, '.', ',') }}
+                                                                            </td>
+                                                                        </tr>
+                                                                    @endforeach
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
 
                                             <!-- Button trigger modal -->
                                             <button type="button" class="btn btn-sm btn-info btn-block" data-toggle="modal"
@@ -216,7 +252,7 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td>
+                                        {{-- <td>
                                             <button type="button" class="btn btn-sm btn-block btn-primary"
                                                 data-toggle="modal"
                                                 data-target="#exampleModalcancelled{{ $data->id }}">
@@ -257,7 +293,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </td>
+                                        </td> --}}
                                     </tr>
                                 @endforeach
                             </tbody>

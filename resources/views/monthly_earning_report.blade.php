@@ -39,14 +39,9 @@
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Reserved Customers</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                {{-- <a href="{{ url('monthly_earning_report') }}">₱
-                                    {{ number_format($reservation_monthly, 2, '.', ',') }}</a> --}}
                                 <h1>{{ $reservation_reserved }}</h1>
                             </div>
                         </div>
-                        {{-- <div class="col-auto">
-                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
-                        </div> --}}
                     </div>
                 </div>
             </div>
@@ -113,6 +108,9 @@
                             </tbody>
                         </table>
                     </div>
+                </div>
+                <div class="card-footer">
+                    <a href="{{ url('monthly_earning_print') }}" style="float-right btn btn-sm btn-info">Print</a>
                 </div>
             </div>
         </div>
