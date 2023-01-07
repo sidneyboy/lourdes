@@ -14,7 +14,7 @@ use App\Models\Contact_us;
 use App\Models\Reservations;
 use App\Models\Reservations_details;
 use DB;
-
+use DateTime;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 
@@ -335,7 +335,7 @@ class HomeController extends Controller
 
         $new = new Reservations_details([
             'reservation_id' => $id,
-            'payment' => 500,
+            'downpayment' => 500,
             'status' => 'Paid Downpayment',
         ]);
 
@@ -470,7 +470,7 @@ class HomeController extends Controller
 
             $new = new Reservations_details([
                 'reservation_id' => $request->input('id'),
-                'payment' => str_replace(',', '', $request->input('amount')),
+                'downpayment' => str_replace(',', '', $request->input('amount')),
                 'status' => 'Paid Downpayment',
             ]);
 
@@ -524,27 +524,137 @@ class HomeController extends Controller
         }
     }
 
-    public function reservation_process_final_data(Request $request)
+    public function paid_downpayment_process(Request $request)
     {
         date_default_timezone_set('Asia/Manila');
         $date = date('Y-m-d');
-        $reservation = Reservations::find($request->input('id'));
+        $reservation = Reservations_details::where('reservation_id', $request->input('id'))->sum('payment');
 
-        $amount = $reservation->payment + $request->input('amount');
+        $amount = $reservation + $request->input('amount');
 
         if ($amount == 6000) {
+
             Reservations::where('id', $request->input('id'))
                 ->update([
-                    'payment' => $amount,
                     'status' => 'Paid',
-                    'payment_dates' => $date,
                 ]);
+
+            $new = new Reservations_details([
+                'reservation_id' => $request->input('id'),
+                'payment' => str_replace(',', '', $request->input('amount')),
+                'status' => 'Paid',
+            ]);
+
+            $new->save();
 
             $subject = '';
             $messages = 'We are happy to served you. Thank you for staying at Nikan Magdale Resort. See you again!';
             Mail::to($request->input('email'))->send(new Contact_us_mail($subject, $messages));
 
-            return redirect('reservations')->with('success', 'Success');
+            return redirect('full_paid')->with('success', 'Success');
+        } else if ($amount < 6000) {
+            Reservations::where('id', $request->input('id'))
+                ->update([
+                    'status' => 'Partial Payment',
+                ]);
+
+            $new = new Reservations_details([
+                'reservation_id' => $request->input('id'),
+                'payment' => str_replace(',', '', $request->input('amount')),
+                'status' => 'Partial Payment',
+            ]);
+
+            $new->save();
+
+            $subject = '';
+            $messages = 'Partial payment acknowledge';
+            Mail::to($request->input('email'))->send(new Contact_us_mail($subject, $messages));
+            return redirect('partial_payment')->with('success', 'Success');
+        } else {
+            return redirect('partial_payment')->with('success', 'Error, Final Payment + Partial Payment must be equal to 6000');
+        }
+    }
+
+    public function partial_payment_process(Request $request)
+    {
+        date_default_timezone_set('Asia/Manila');
+        $date = date('Y-m-d');
+        //$reservation = Reservations::find($request->input('id'));
+
+        $reservation = Reservations_details::where('reservation_id', $request->input('id'))->sum('payment');
+
+        $amount = $reservation + $request->input('amount');
+
+        if ($amount == 6000) {
+
+            Reservations::where('id', $request->input('id'))
+                ->update([
+                    'status' => 'Paid',
+                ]);
+
+            $new = new Reservations_details([
+                'reservation_id' => $request->input('id'),
+                'payment' => str_replace(',', '', $request->input('amount')),
+                'status' => 'Paid',
+            ]);
+
+            $new->save();
+
+            $subject = '';
+            $messages = 'We are happy to served you. Thank you for staying at Nikan Magdale Resort. See you again!';
+            Mail::to($request->input('email'))->send(new Contact_us_mail($subject, $messages));
+
+            return redirect('full_paid')->with('success', 'Success');
+        } else if ($amount < 6000) {
+            Reservations::where('id', $request->input('id'))
+                ->update([
+                    'status' => 'Partial Payment',
+                ]);
+
+            $new = new Reservations_details([
+                'reservation_id' => $request->input('id'),
+                'payment' => str_replace(',', '', $request->input('amount')),
+                'status' => 'Partial Payment',
+            ]);
+
+            $new->save();
+
+            $subject = '';
+            $messages = 'Partial payment acknowledge';
+            Mail::to($request->input('email'))->send(new Contact_us_mail($subject, $messages));
+            return redirect('partial_payment')->with('success', 'Success');
+        } else {
+            return redirect('partial_payment')->with('success', 'Error, Final Payment + Partial Payment must be equal to 6000');
+        }
+    }
+
+    public function reservation_process_final_data(Request $request)
+    {
+        date_default_timezone_set('Asia/Manila');
+        $date = date('Y-m-d');
+        $reservation = Reservations_details::where('reservation_id', $request->input('id'))->sum('payment');
+
+        $amount = $reservation + $request->input('amount');
+
+        if ($amount == 6000) {
+            Reservations::where('id', $request->input('id'))
+                ->update([
+                    'status' => 'Paid',
+                ]);
+
+            $new = new Reservations_details([
+                'reservation_id' => $request->input('id'),
+                'payment' => str_replace(',', '', $request->input('amount')),
+                'status' => 'Paid',
+            ]);
+
+            $new->save();
+
+            $subject = '';
+            $messages = 'We are happy to served you. Thank you for staying at Nikan Magdale Resort. See you again!';
+            Mail::to($request->input('email'))->send(new Contact_us_mail($subject, $messages));
+
+            return redirect('full_paid')->with('success', 'Success');
         } else {
             return redirect('reservations')->with('success', 'Error, Final Payment + Partial Payment must be equal to 6000');
         }
@@ -584,49 +694,132 @@ class HomeController extends Controller
         $month = date('m');
         $year = date('Y');
 
+
+        $message_count = Contact_us::where('status', 'Pending')->count();
+        $reservation_count = Reservations::where('status', 'Pending')->count();
+        return view('monthly_earning_report', [
+            // 'reservations' => $reservations,
+            // 'total' => $total,
+            // 'reservation_paid' => $reservation_paid,
+            // 'reservation_reserved' => $reservation_reserved,
+            'message_count' => $message_count,
+            'reservation_count' => $reservation_count,
+            // 'cancelled' => $cancelled,
+        ]);
+    }
+
+    public function monthly_earning_proceed(Request $request)
+    {
+        $monthly_sales = Reservations_details::select(
+            DB::raw('year(created_at) as year'),
+            DB::raw('month(created_at) as month'),
+            DB::raw('sum(payment) as total_sales'),
+            DB::raw('sum(downpayment) as downpayment'),
+        )->where(DB::raw('date(created_at)'), '>=', $request->input('year') . "-01-01")
+            ->groupBy('year')
+            ->groupBy('month')
+            ->get()
+            ->toArray();
+
+        if (count($monthly_sales) != 0) {
+            foreach ($monthly_sales as $monthly_sales_result) {
+                $dateObj   = DateTime::createFromFormat('!m', $monthly_sales_result['month']);
+                $monthName = $dateObj->format('F'); // March
+                $month_label[] = $monthName;
+                $monthly_total_sales[] = round($monthly_sales_result['total_sales'] + $monthly_sales_result['downpayment'], 2);
+                $month[] = $monthly_sales_result['month'];
+            }
+        } else {
+            $month_label = 0;
+            $monthly_total_sales[] = '';
+            $month[] = '';
+        }
+
+
+
+        return view('monthly_earning_proceed')
+            ->with('month_label', $month_label)
+            ->with('monthly_total_sales', $monthly_total_sales)
+            ->with('month', $month)
+            ->with('year', $request->input('year'));
+    }
+
+    public function monthly_earning_view_sales_report($month)
+    {
+        //return $month;
+        date_default_timezone_set('Asia/Manila');
+        $date = date('Y-m-d');
+        $day = date('d');
+
+        $sales = DB::table('reservations_details')
+            ->select(DB::raw('DATE(created_at) as date'), DB::raw('sum(payment) as total_sales'), DB::raw('sum(downpayment) as downpayment'))
+            ->groupBy('date')
+            ->whereMonth('created_at', $month)
+            ->get()
+            ->toArray();
+
+        $dateObj   = DateTime::createFromFormat('!m', $month);
+        $monthName = $dateObj->format('F'); // March
+
+        $message_count = Contact_us::where('status', 'Pending')->count();
+        $reservation_count = Reservations::where('status', 'Pending')->count();
+
         $cancelled = Reservations::select(
             DB::raw("(DATE_FORMAT(created_at, '%d-%m-%Y')) as date"),
             DB::raw('count(*) as count')
         )
             ->orderBy('created_at')
-            ->groupBy(DB::raw("DATE_FORMAT(created_at, '%d-%m-%Y')"))
+            ->whereMonth('created_at', $month)
+            ->groupBy('date')
             ->where('status', 'Cancelled')
             ->get();
 
-        $reservations = Reservations::whereMonth('created_at', $month)
-            ->where('status', '!=', 'Pending')
-            ->where('status', '!=', 'Cancelled')
-            ->get();
-
-        if (count($reservations) != 0) {
-            foreach ($reservations as $key => $data) {
-                $total[$data->id] = Reservations_details::where('reservation_id', $data->id)
-                    ->sum('payment');
-            }
-        } else {
-            $total[] = '';
-        }
+        return view('monthly_earning_view_sales_report', [
+            'sales' => $sales,
+            'cancelled' => $cancelled,
+            'message_count' => $message_count,
+            'reservation_count' => $reservation_count,
+        ])->with('monthName', $monthName)
+            ->with('month', $month);
+    }
 
 
-        $reservation_paid = Reservations::where('status', 'Paid')->count();
-        $reservation_reserved = Reservations::where('status', '!=', 'Cancelled')
-            ->where('status', '!=', 'Paid')
-            ->where('status', '!=', 'Pending')
-            ->count();
+    public function monthly_earning_report_print($month)
+    {
+        date_default_timezone_set('Asia/Manila');
+        $date = date('Y-m-d');
+        $day = date('d');
 
+        $sales = DB::table('reservations_details')
+            ->select(DB::raw('DATE(created_at) as date'), DB::raw('sum(payment) as total_sales'), DB::raw('sum(downpayment) as downpayment'))
+            ->groupBy('date')
+            ->whereMonth('created_at', $month)
+            ->get()
+            ->toArray();
 
+        $dateObj   = DateTime::createFromFormat('!m', $month);
+        $monthName = $dateObj->format('F'); // March
 
         $message_count = Contact_us::where('status', 'Pending')->count();
         $reservation_count = Reservations::where('status', 'Pending')->count();
-        return view('monthly_earning_report', [
-            'reservations' => $reservations,
-            'total' => $total,
-            'reservation_paid' => $reservation_paid,
-            'reservation_reserved' => $reservation_reserved,
+
+        $cancelled = Reservations::select(
+            DB::raw("(DATE_FORMAT(created_at, '%d-%m-%Y')) as date"),
+            DB::raw('count(*) as count')
+        )
+            ->orderBy('created_at')
+            ->whereMonth('created_at', $month)
+            ->groupBy('date')
+            ->where('status', 'Cancelled')
+            ->get();
+
+        return view('monthly_earning_report_print', [
+            'sales' => $sales,
+            'cancelled' => $cancelled,
             'message_count' => $message_count,
             'reservation_count' => $reservation_count,
-            'cancelled' => $cancelled,
-        ]);
+        ])->with('monthName', $monthName)
+            ->with('month', $month);
     }
 
     public function monthly_earning_print()
@@ -688,28 +881,11 @@ class HomeController extends Controller
         $month = date('m');
         $year = date('Y');
 
-        $cancelled = Reservations::select(
-            DB::raw("(DATE_FORMAT(created_at, '%d-%m-%Y')) as date"),
-            DB::raw('count(*) as count')
-        )
-            ->orderBy('created_at')
-            ->groupBy(DB::raw("DATE_FORMAT(created_at, '%d-%m-%Y')"))
-            ->where('status', 'Cancelled')
-            ->get();
-
-        $reservations = Reservations::whereYear('created_at', $year)
-            ->where('status', '!=', 'Pending')
-            ->where('status', '!=', 'Cancelled')
-            ->get();
-
-        if (count($reservations) != 0) {
-            foreach ($reservations as $key => $data) {
-                $total[$data->id] = Reservations_details::where('reservation_id', $data->id)
-                    ->sum('payment');
-            }
-        } else {
-            $total[] = '';
-        }
+        $sales = DB::table('reservations_details')
+            ->select(DB::raw('YEAR(created_at) as year'), DB::raw('sum(payment) as total_sales'), DB::raw('sum(downpayment) as downpayment'))
+            ->groupBy('year')
+            ->get()
+            ->toArray();
 
 
         $reservation_paid = Reservations::where('status', 'Paid')->count();
@@ -723,15 +899,77 @@ class HomeController extends Controller
         $message_count = Contact_us::where('status', 'Pending')->count();
         $reservation_count = Reservations::where('status', 'Pending')->count();
         return view('yearly_earning_report', [
-            'reservations' => $reservations,
-            'total' => $total,
+            'sales' => $sales,
             'reservation_paid' => $reservation_paid,
             'reservation_reserved' => $reservation_reserved,
             'message_count' => $message_count,
             'reservation_count' => $reservation_count,
-            'cancelled' => $cancelled,
+            // 'cancelled' => $cancelled,
         ]);
     }
+
+    public function yearly_earning_view_sales_report($year)
+    {
+        $sales = DB::table('reservations_details')
+            ->select(DB::raw('MONTH(created_at) as month'), DB::raw('sum(payment) as total_sales'), DB::raw('sum(downpayment) as downpayment'))
+            ->whereYear('created_at', $year)
+            ->groupBy('month')
+            ->get()
+            ->toArray();
+
+        $message_count = Contact_us::where('status', 'Pending')->count();
+        $reservation_count = Reservations::where('status', 'Pending')->count();
+
+        $cancelled = Reservations::select(
+            DB::raw('MONTH(created_at) as month'),
+            DB::raw('count(*) as count')
+        )
+            ->orderBy('created_at')
+            ->groupBy('month')
+            ->whereYear('created_at', $year)
+            ->where('status', 'Cancelled')
+            ->get();
+
+        return view('yearly_earning_view_sales_report', [
+            'message_count' => $message_count,
+            'reservation_count' => $reservation_count,
+            'sales' => $sales,
+            'cancelled' => $cancelled,
+            'year' => $year,
+        ]);
+    }
+
+    public function yearly_earning_report_print($year)
+    {
+        $sales = DB::table('reservations_details')
+            ->select(DB::raw('MONTH(created_at) as month'), DB::raw('sum(payment) as total_sales'), DB::raw('sum(downpayment) as downpayment'))
+            ->whereYear('created_at', $year)
+            ->groupBy('month')
+            ->get()
+            ->toArray();
+
+        $message_count = Contact_us::where('status', 'Pending')->count();
+        $reservation_count = Reservations::where('status', 'Pending')->count();
+
+        $cancelled = Reservations::select(
+            DB::raw('MONTH(created_at) as month'),
+            DB::raw('count(*) as count')
+        )
+            ->orderBy('created_at')
+            ->groupBy('month')
+            ->whereYear('created_at', $year)
+            ->where('status', 'Cancelled')
+            ->get();
+
+        return view('yearly_earning_report_print', [
+            'message_count' => $message_count,
+            'reservation_count' => $reservation_count,
+            'sales' => $sales,
+            'cancelled' => $cancelled,
+            'year' => $year,
+        ]);
+    }
+
 
     public function yearly_earning_print()
     {

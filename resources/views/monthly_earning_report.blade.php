@@ -17,130 +17,65 @@
     @endif
 
     <div class="row">
-        <div class="col-xl-4 col-md-6 mb-4">
-            <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Paid</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                <h1> {{ $reservation_paid }}</h1>
-                            </div>
-                        </div>
+        <div class="col-md-12" style="margin-bottom: 10px;">
+            <div class="card">
+                <div class="card-header">Monthly Earnings</div>
+                <form id="monthly_earning_proceed">
+                    @csrf
+                    <div class="card-body">
+                        <select name="year" class="form-control" id="year">
+                            <option value="" default>Select</option>
+                            <option value="2022">2022</option>
+                            <option value="2023">2023</option>
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
+                            <option value="2026">2026</option>
+                            <option value="2027">2027</option>
+                            <option value="2028">2028</option>
+                            <option value="2029">2029</option>
+                            <option value="2030">2030</option>
+                            <option value="2031">2031</option>
+                            <option value="2032">2032</option>
+                            <option value="2033">2033</option>
+                            <option value="2034">2034</option>
+                        </select>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-xl-4 col-md-6 mb-4">
-            <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Reserved Customers</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                <h1>{{ $reservation_reserved }}</h1>
-                            </div>
-                        </div>
+                    <div class="card-footer">
+                        <button class="btn btn-sm float-right btn-info" style="margin-bottom: 5px;">Proceed</button>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-xl-4 col-md-6 mb-4">
-            <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Amount</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                <h1>
-                                    ₱ {{ number_format(6000 * $reservation_paid, 2, '.', ',') }}
-                                </h1>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
+
     <div class="row">
         <div class="col-md-12">
-            <div class="card" style="margin-bottom: 20px;">
-                <div class="card-header">Monthly Earnings</div>
-                <div class="card-body">
-                    <div class="table table-responsive">
-                        <table class="table table-bordered table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Month</th>
-                                    <th>Customer</th>
-                                    <th>Reservation Date</th>
-                                    <th>Status</th>
-                                    <th>Total Payment</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($reservations as $data)
-                                    <tr>
-                                        <td>
-                                            {{ date('F', strtotime($data->created_at)) }}
-                                            {{-- @php
-                                                $dateObj = DateTime::createFromFormat('!m', $data->created_at);
-                                                echo $monthName = $dateObj->format('F');
-                                            @endphp --}}
-                                        </td>
-
-                                        <td>{{ $data->first_name . ' ' . $data->middle_name . ' ' . $data->last_name }}</td>
-                                        <td>{{ date('F j, Y', strtotime($data->date_from)) }}</td>
-                                        <td>
-                                            @if ($data->reservation_latest)
-                                                <span
-                                                    class="badge badge-success btn-block">{{ $data->reservation_latest->status }}</span>
-                                            @else
-                                                None
-                                            @endif
-                                        </td>
-                                        <td>₱ {{ number_format($total[$data->id], 2, '.', ',') }}</td>
-
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <a href="{{ url('monthly_earning_print') }}" style="float-right btn btn-sm btn-info">Print</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-12">
             <div class="card">
-                <div class="card-header">Monthly Cancellations</div>
+                <div class="card-header">Data</div>
                 <div class="card-body">
-                    <div class="table table-responsive">
-                        <table class="table table-bordered table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Month</th>
-                                    <th>Count</th>
-                                    <th>Total Compensation</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($cancelled as $data)
-                                    <tr>
-                                        <td>{{ date('F j, Y', strtotime($data->date)) }}</td>
-                                        <td>{{ $data->count }}</td>
-                                        <td>₱ {{ number_format($data->count * 500, 2, '.', ',') }}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                    <div id="monthly_earning_proceed_page"></div>
                 </div>
             </div>
         </div>
-
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"
+        integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script>
+        $("#monthly_earning_proceed").on('submit', (function(e) {
+            e.preventDefault();
+            $('.loading').show();
+            $.ajax({
+                url: "monthly_earning_proceed",
+                type: "POST",
+                data: new FormData(this),
+                contentType: false,
+                cache: false,
+                processData: false,
+                success: function(data) {
+                    $('.loading').hide();
+                    $('#monthly_earning_proceed_page').html(data);
+                },
+            });
+        }));
+    </script>
 @endsection

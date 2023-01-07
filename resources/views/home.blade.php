@@ -27,11 +27,11 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Earnings (Monthly)</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                <a href="{{ url('monthly_earning_report') }}">₱
-                                    {{ number_format($reservation_monthly, 2, '.', ',') }}</a>
-                            </div>
+                            <a href="{{ url('monthly_earning_report') }}">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Earnings (Monthly)
+                                </div>
+
+                            </a>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -47,11 +47,11 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Earnings (Annual)</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                <a href="{{ url('yearly_earning_report') }}">₱
-                                    {{ number_format($reservation_yearly, 2, '.', ',') }}</a>
-                            </div>
+                            <a href="{{ url('yearly_earning_report') }}">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Earnings (Annual)
+                                </div>
+
+                            </a>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -103,7 +103,7 @@
                     <div class="card-header">
                         @php
                             $dateObj = DateTime::createFromFormat('!m', $data_month->month);
-                            echo $monthName = $dateObj->format('F') ." ". $data_month->year;
+                            echo $monthName = $dateObj->format('F') . ' ' . $data_month->year;
                         @endphp
                     </div>
                     <div class="card-body">
@@ -116,7 +116,7 @@
                             <tbody>
                                 @foreach ($reservations[$data_month->month] as $data)
                                     <tr>
-                                        <td>{{ $data->first_name ." ". $data->middle_name ." ". $data->last_name }}</td>
+                                        <td>{{ $data->first_name . ' ' . $data->middle_name . ' ' . $data->last_name }}</td>
                                         <td>{{ date('F j, Y', strtotime($data->date)) }}</td>
                                         <td>{{ date('F j, Y', strtotime($data->date_from)) }}</td>
                                     </tr>

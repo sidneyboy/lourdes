@@ -157,7 +157,7 @@
                                                                         <tr>
                                                                             <td>{{ date('F j, Y', strtotime($details->created_at)) }}
                                                                             </td>
-                                                                            <td>{{ number_format($details->payment, 2, '.', ',') }}
+                                                                            <td>{{ number_format($details->payment + $details->downpayment, 2, '.', ',') }}
                                                                             </td>
                                                                         </tr>
                                                                     @endforeach
@@ -185,7 +185,7 @@
                                                                 <span aria-hidden="true">&times;</span>
                                                             </button>
                                                         </div>
-                                                        <form action="{{ url('reservation_process_data') }}"
+                                                        <form action="{{ route('paid_downpayment_process') }}"
                                                             method="post">
                                                             @csrf
                                                             <div class="modal-body">

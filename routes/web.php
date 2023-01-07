@@ -37,6 +37,11 @@ Route::get('/message', 'HomeController@message')->name('message');
 Route::post('/message_process', 'HomeController@message_process')->name('message_process');
 Route::get('/reservations', 'HomeController@reservations')->name('reservations');
 Route::post('/reservation_process_data', 'HomeController@reservation_process_data')->name('reservation_process_data');
+Route::post('/partial_payment_process', 'HomeController@partial_payment_process')->name('partial_payment_process');
+Route::post('/paid_downpayment_process', 'HomeController@paid_downpayment_process')->name('paid_downpayment_process');
+
+
+
 Route::post('/reservation_process_final_data', 'HomeController@reservation_process_final_data')->name('reservation_process_final_data');
 Route::post('/about_edit_process', 'HomeController@about_edit_process')->name('about_edit_process');
 Route::post('/about_edit_image', 'HomeController@about_edit_image')->name('about_edit_image');
@@ -44,6 +49,19 @@ Route::get('/carousel_active/{id}/{status}', 'HomeController@carousel_active')->
 Route::post('/cancel_reservation/', 'HomeController@cancel_reservation')->name('cancel_reservation');
 Route::get('/accomodation_status/{id}/{status}', 'HomeController@accomodation_status')->name('accomodation_status');
 Route::get('/monthly_earning_report/', 'HomeController@monthly_earning_report')->name('monthly_earning_report');
+Route::post('/monthly_earning_proceed/', 'HomeController@monthly_earning_proceed')->name('monthly_earning_proceed');
+Route::get('/monthly_earning_view_sales_report/{month}', 'HomeController@monthly_earning_view_sales_report')->name('monthly_earning_view_sales_report');
+Route::get('/yearly_earning_view_sales_report/{year}', 'HomeController@yearly_earning_view_sales_report')->name('yearly_earning_view_sales_report');
+Route::get('/monthly_earning_report_print/{month}', 'HomeController@monthly_earning_report_print')->name('monthly_earning_report_print');
+Route::get('/yearly_earning_report_print/{year}', 'HomeController@yearly_earning_report_print')->name('yearly_earning_report_print');
+
+
+
+
+
+
+
+
 Route::get('/yearly_earning_report/', 'HomeController@yearly_earning_report')->name('yearly_earning_report');
 
 Route::get('/paid_downpayment/', 'HomeController@paid_downpayment')->name('paid_downpayment');

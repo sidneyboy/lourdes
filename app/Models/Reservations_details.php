@@ -12,6 +12,7 @@ class Reservations_details extends Model
     protected $fillable = [
         'reservation_id',
         'payment',
+        'downpayment',
         'status',
     ];
 }

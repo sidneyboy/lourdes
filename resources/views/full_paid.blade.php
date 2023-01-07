@@ -160,7 +160,7 @@
                                                                             <tr>
                                                                                 <td>{{ date('F j, Y', strtotime($details->created_at)) }}
                                                                                 </td>
-                                                                                <td>{{ number_format($details->payment, 2, '.', ',') }}
+                                                                                <td>{{ number_format($details->payment + $downpayment, 2, '.', ',') }}
                                                                                 </td>
                                                                             </tr>
                                                                         @endforeach
@@ -172,7 +172,7 @@
                                                 </div>
 
                                                 <!-- Button trigger modal -->
-                                                <button type="button" class="btn btn-sm btn-info btn-block"
+                                                {{-- <button type="button" class="btn btn-sm btn-info btn-block"
                                                     data-toggle="modal" data-target="#exampleModal">
                                                     Amount
                                                 </button>
@@ -214,7 +214,7 @@
                                                             </form>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div> --}}
                                             </td>
                                             <td>
                                                 <!-- Button trigger modal -->
