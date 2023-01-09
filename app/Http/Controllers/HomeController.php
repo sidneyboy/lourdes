@@ -528,9 +528,14 @@ class HomeController extends Controller
     {
         date_default_timezone_set('Asia/Manila');
         $date = date('Y-m-d');
-        $reservation = Reservations_details::where('reservation_id', $request->input('id'))->sum('payment');
+        $reservation = Reservations_details::where('reservation_id', $request->input('id'))->get();
 
-        $amount = $reservation + $request->input('amount');
+        foreach ($reservation as $key => $sum_data) {
+            $total_amount[] = $sum_data->payment + $sum_data->downpayment;
+        }
+
+
+        $amount = array_sum($total_amount) + $request->input('amount');
 
         if ($amount == 6000) {
 
@@ -579,11 +584,15 @@ class HomeController extends Controller
     {
         date_default_timezone_set('Asia/Manila');
         $date = date('Y-m-d');
-        //$reservation = Reservations::find($request->input('id'));
+        //return $request->input('id');
+        $reservation = Reservations_details::where('reservation_id', $request->input('id'))->get();
 
-        $reservation = Reservations_details::where('reservation_id', $request->input('id'))->sum('payment');
+        foreach ($reservation as $key => $sum_data) {
+            $total_amount[] = $sum_data->payment + $sum_data->downpayment;
+        }
 
-        $amount = $reservation + $request->input('amount');
+
+        $amount = array_sum($total_amount) + $request->input('amount');
 
         if ($amount == 6000) {
 
@@ -632,9 +641,14 @@ class HomeController extends Controller
     {
         date_default_timezone_set('Asia/Manila');
         $date = date('Y-m-d');
-        $reservation = Reservations_details::where('reservation_id', $request->input('id'))->sum('payment');
+        $reservation = Reservations_details::where('reservation_id', $request->input('id'))->get();
 
-        $amount = $reservation + $request->input('amount');
+        foreach ($reservation as $key => $sum_data) {
+            $total_amount[] = $sum_data->payment + $sum_data->downpayment;
+        }
+
+
+        $amount = array_sum($total_amount) + $request->input('amount');
 
         if ($amount == 6000) {
             Reservations::where('id', $request->input('id'))

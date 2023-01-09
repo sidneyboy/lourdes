@@ -170,12 +170,12 @@
 
 
                                             <button type="button" class="btn btn-sm btn-info btn-block"
-                                                data-toggle="modal" data-target="#exampleModal">
+                                                data-toggle="modal" data-target="#exampleModalAmount{{ $data->id }}">
                                                 Amount
                                             </button>
 
                                             <!-- Modal -->
-                                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                                            <div class="modal fade" id="exampleModalAmount{{ $data->id }}" tabindex="-1" role="dialog"
                                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog" role="document">
                                                     <div class="modal-content">

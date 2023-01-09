@@ -160,7 +160,7 @@
                                                                             <tr>
                                                                                 <td>{{ date('F j, Y', strtotime($details->created_at)) }}
                                                                                 </td>
-                                                                                <td>{{ number_format($details->payment + $downpayment, 2, '.', ',') }}
+                                                                                <td>{{ number_format($details->payment + $details->downpayment, 2, '.', ',') }}
                                                                                 </td>
                                                                             </tr>
                                                                         @endforeach
