@@ -72,6 +72,7 @@ class HomeController extends Controller
         foreach ($reservation_month as $key => $value) {
             $reservations[$value->month] = Reservations::whereMonth('date_from', $value->month)
                 ->where('status', '!=', 'Cancelled')
+                ->where('status', '!=', 'Pending')
                 ->get();
         }
 

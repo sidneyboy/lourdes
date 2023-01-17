@@ -94,9 +94,11 @@
                 <div class="col-md-12">
                     <div class="titlepage">
                         <h2>Book Now</h2>
-                        <h3 style="text-align: left;color:blue;">Note: For booking a reservation, there is a down
+                        <br />
+                        <h3 style="font-size:20px;font-weight:bold;">{{ date('F j, Y', strtotime($date_from)) }}</h3>
+                        <h3 style="text-align: left;color:blue;font-size:20px;font-weight:bold;">Note: For booking a reservation, there is a down
                             payment of 500 pesos. The QR code for our G-Cash is shown below. </h3>
-                        <h3 style="text-align: left;color:blue;">Note: Please attach a screenshot of your receipt as a
+                        <h3 style="text-align: left;color:blue;font-size:20px;font-weight:bold;">Note: Please attach a screenshot of your receipt as a
                             proof of payment.</h3>
                     </div>
                 </div>
@@ -143,7 +145,7 @@
                         <input type="file" class="contactus" required name="images" required>
                     </div>
                     <div class="col-md-12">
-                        <p>
+                        <p style="color:blue;font-size:20px;font-weight:bold;">
                             Note: A down payment of 500 pesos is non-refundable. Any circumstances may come unexpectedly
                             but we are sorry to say we have a policy for booking a reservation that has no return, no
                             exchange.

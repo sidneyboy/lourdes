@@ -25,39 +25,45 @@
                         <table class="table table-bordered table-hover table-sm">
                             <thead>
                                 <tr>
+                                    <td>Date Transacted</td>
+                                    <td>Reservation Date</td>
                                     <td>Status</td>
                                     <td>First Name</td>
                                     <td>Middle Name</td>
                                     <td>Last Name</td>
                                     <td>Information</td>
                                     <td>Payment</td>
-                                    <td>Transaction</td>
                                     <td>Cancel Option</td>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($reservations as $data)
                                     <tr>
+                                        <td>{{ date('F j, Y', strtotime($data->created_at)) }}
+                                        </td>
+                                        <td>{{ date('F j, Y', strtotime($data->date_from)) }}
+                                        </td>
                                         <td>{{ $data->status }}</td>
                                         <td>{{ $data->first_name }}</td>
                                         <td>{{ $data->middle_name }}</td>
                                         <td>{{ $data->last_name }}</td>
                                         <td>
                                             <!-- Button trigger modal -->
-                                            <button type="button" class="btn btn-success btn-sm btn-block"
-                                                style="margin-bottom: 10px;" data-toggle="modal"
-                                                data-target="#exampleModalcontact{{ $data->id }}">
-                                                Contact Information
+                                            <button type="button" class="btn btn-sm btn-primary btn-block"
+                                                data-toggle="modal"
+                                                data-target="#exampleModalview_details{{ $data->id }}">
+                                                View Details
                                             </button>
 
                                             <!-- Modal -->
-                                            <div class="modal fade" id="exampleModalcontact{{ $data->id }}"
+                                            <div class="modal fade" id="exampleModalview_details{{ $data->id }}"
                                                 tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
                                                 aria-hidden="true">
                                                 <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLabel">Information</h5>
+                                                            <h5 class="modal-title" id="exampleModalLabel">Reservation
+                                                                Details</h5>
                                                             <button type="button" class="close" data-dismiss="modal"
                                                                 aria-label="Close">
                                                                 <span aria-hidden="true">&times;</span>
@@ -78,38 +84,15 @@
                                                                     </tr>
                                                                 </tbody>
                                                             </table>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
 
-                                            <!-- Button trigger modal -->
-                                            <button type="button" class="btn btn-primary btn-sm btn-block"
-                                                data-toggle="modal" data-target="#exampleModal_image{{ $data->id }}">
-                                                {{-- <img src="{{ asset('/storage/'. $data->receipt) }}" class="img img-thumbnail"> --}}
-                                                Gcash Receipt
-                                            </button>
+                                                            <br />
 
-                                            <!-- Modal -->
-                                            <div class="modal fade" id="exampleModal_image{{ $data->id }}"
-                                                tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                                                aria-hidden="true">
-                                                <div class="modal-dialog" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <button type="button" class="close" data-dismiss="modal"
-                                                                aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body">
                                                             <img src="{{ asset('/storage/' . $data->receipt) }}"
                                                                 class="img img-thumbnail">
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary"
+                                                            <button type="button" class="btn btn-sm btn-secondary"
                                                                 data-dismiss="modal">Close</button>
-
                                                         </div>
                                                     </div>
                                                 </div>
@@ -167,57 +150,17 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <!-- Button trigger modal -->
-                                            <button type="button" class="btn btn-success btn-sm btn-block"
-                                                data-toggle="modal" data-target="#exampleModaldate{{ $data->id }}">
-                                                Date
-                                            </button>
-
-                                            <!-- Modal -->
-                                            <div class="modal fade" id="exampleModaldate{{ $data->id }}"
-                                                tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                                                aria-hidden="true">
-                                                <div class="modal-dialog" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <button type="button" class="close" data-dismiss="modal"
-                                                                aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <table class="table table-bordered table-hover table-sm">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th>Date Transacted</th>
-                                                                        <th>Reservation Date</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td>{{ date('F j, Y', strtotime($data->created_at)) }}
-                                                                        </td>
-                                                                        <td>{{ date('F j, Y', strtotime($data->date_from)) }}
-                                                                        </td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
                                             @if ($data->status == 'Pending')
-                
-                                                <button type="button" class="btn btn-sm btn-block btn-primary"
-                                                    data-toggle="modal" data-target="#exampleModalcancelled{{ $data->id }}">
+                                                <button type="button" class="btn btn-sm btn-block btn-danger"
+                                                    data-toggle="modal"
+                                                    data-target="#exampleModalcancelled{{ $data->id }}">
                                                     Cancel
                                                 </button>
 
                                                 <!-- Modal -->
-                                                <div class="modal fade" id="exampleModalcancelled{{ $data->id }}" tabindex="-1" role="dialog"
-                                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal fade" id="exampleModalcancelled{{ $data->id }}"
+                                                    tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                                    aria-hidden="true">
                                                     <div class="modal-dialog" role="document">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
@@ -239,9 +182,11 @@
                                                                         value="{{ $data->email }}">
                                                                 </div>
                                                                 <div class="modal-footer">
-                                                                    <button type="button" class="btn btns-sm btn-secondary"
+                                                                    <button type="button"
+                                                                        class="btn btns-sm btn-secondary"
                                                                         data-dismiss="modal">Close</button>
-                                                                    <button type="submit" class="btn btns-sm btn-primary">Save
+                                                                    <button type="submit"
+                                                                        class="btn btns-sm btn-primary">Save
                                                                         changes</button>
                                                                 </div>
                                                             </form>
