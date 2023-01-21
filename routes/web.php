@@ -64,6 +64,13 @@ Route::get('/yearly_earning_report_print/{year}', 'HomeController@yearly_earning
 
 Route::get('/yearly_earning_report/', 'HomeController@yearly_earning_report')->name('yearly_earning_report');
 
+Route::get('/search_paid_downpayment/', 'HomeController@search_paid_downpayment')->name('search_paid_downpayment');
+Route::get('/search_reservations/', 'HomeController@search_reservations')->name('search_reservations');
+Route::get('/search_partial_payment/', 'HomeController@search_partial_payment')->name('search_partial_payment');
+Route::get('/search_full_paid/', 'HomeController@search_full_paid')->name('search_full_paid');
+
+
+
 Route::get('/paid_downpayment/', 'HomeController@paid_downpayment')->name('paid_downpayment');
 Route::get('/partial_payment/', 'HomeController@partial_payment')->name('partial_payment');
 Route::get('/full_paid/', 'HomeController@full_paid')->name('full_paid');

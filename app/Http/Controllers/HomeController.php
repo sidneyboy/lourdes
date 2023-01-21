@@ -1080,4 +1080,101 @@ class HomeController extends Controller
             return redirect('partial_payment')->with('error', 'Total payment must not be greater than ₱ 6,000.00');
         }
     }
+
+    public function search_paid_downpayment(Request $request)
+    {
+        //return $request->input();
+        $users = User::count();
+
+        $widget = [
+            'users' => $users,
+            //...
+        ];
+
+        $message_count = Contact_us::where('status', 'Pending')->count();
+        $reservation_count = Reservations::where('status', 'Pending')->count();
+
+        $data_range = explode('-', $request->input('daterange'));
+        $date_from = date('Y-m-d', strtotime($data_range[0]));
+        $date_to = date('Y-m-d', strtotime($data_range[1]));
+        $reservations = Reservations::whereBetween('created_at', [$date_from, $date_to])->where('status', 'Paid Downpayment')->get();
+
+        return view('search_paid_downpayment', [
+            'reservations' => $reservations,
+            'reservation_count' => $reservation_count,
+            'message_count' => $message_count,
+        ]);
+    }
+
+    public function search_reservations(Request $request)
+    {
+        $users = User::count();
+
+        $widget = [
+            'users' => $users,
+            //...
+        ];
+
+        $message_count = Contact_us::where('status', 'Pending')->count();
+        $reservation_count = Reservations::where('status', 'Pending')->count();
+
+        $data_range = explode('-', $request->input('daterange'));
+        $date_from = date('Y-m-d', strtotime($data_range[0]));
+        $date_to = date('Y-m-d', strtotime($data_range[1]));
+        $reservations = Reservations::whereBetween('created_at', [$date_from, $date_to])->where('status', 'Pending')->get();
+
+        return view('search_reservations', [
+            'reservations' => $reservations,
+            'reservation_count' => $reservation_count,
+            'message_count' => $message_count,
+        ]);
+    }
+
+    public function search_partial_payment(Request $request)
+    {
+        $users = User::count();
+
+        $widget = [
+            'users' => $users,
+            //...
+        ];
+
+        $message_count = Contact_us::where('status', 'Pending')->count();
+        $reservation_count = Reservations::where('status', 'Pending')->count();
+
+        $data_range = explode('-', $request->input('daterange'));
+        $date_from = date('Y-m-d', strtotime($data_range[0]));
+        $date_to = date('Y-m-d', strtotime($data_range[1]));
+        $reservations = Reservations::whereBetween('created_at', [$date_from, $date_to])->where('status', 'Partial Payment')->get();
+
+        return view('search_partial_payment', [
+            'reservations' => $reservations,
+            'reservation_count' => $reservation_count,
+            'message_count' => $message_count,
+        ]);
+    }
+
+    public function search_full_paid(Request $request)
+    {
+        $users = User::count();
+
+        $widget = [
+            'users' => $users,
+            //...
+        ];
+
+        $message_count = Contact_us::where('status', 'Pending')->count();
+        $reservation_count = Reservations::where('status', 'Pending')->count();
+
+        $data_range = explode('-', $request->input('daterange'));
+        $date_from = date('Y-m-d', strtotime($data_range[0]));
+        $date_to = date('Y-m-d', strtotime($data_range[1]));
+        $reservations = Reservations::whereBetween('created_at', [$date_from, $date_to])->where('status', 'Paid')->get();
+
+        return view('search_full_paid', [
+            'reservations' => $reservations,
+            'reservation_count' => $reservation_count,
+            'message_count' => $message_count,
+        ]);
+    }
 }
