@@ -96,7 +96,8 @@
                                 <thead>
                                     <tr>
                                         <th>Count</th>
-                                        <th>{{ round(array_sum($sales_sum) / 6000,2) }}</th>
+                                        <th>{{ (array_sum($sales_sum) + array_sum($down_sum))/6000 }}</th>
+                                        {{-- <th>{{ round(array_sum($sales_sum) + array_sum($down_sum) / 6000,2) }}</th> --}}
                                     </tr>
                                     <tr>
                                         <th>Forecasted</th>

@@ -8,7 +8,7 @@
         </tr>
     </thead>
     <tbody>
-        @if ($month_label != 0)
+        {{-- @if ($month_label != 0)
             @for ($i = 0; $i < count($month_label); $i++)
                 <tr>
                     <td>{{ $year }}</td>
@@ -21,6 +21,24 @@
                 <tr>
                     <td colspan="4" style="text-align: center">NO DATA FOUND!</td>
                 </tr>
+        @endif --}}
+
+        @if (count($monthly_sales) != 0)
+            @foreach ($monthly_sales as $data)
+                <tr>
+                    <td>{{ $data->year }}</td>
+                    <td>
+                        @php
+                            $dateObj = DateTime::createFromFormat('!m', $data->month);
+                            echo $monthName = $dateObj->format('F');
+                        @endphp
+                    </td>
+                    <td>{{ $data->total_sales + $data->downpayment }}</td>
+                    <td><a target="_blank"
+                            href="{{ url('monthly_earning_view_sales_report', ['month' => $data->month]) }}">View Sales
+                            Report</a></td>
+                </tr>
+            @endforeach
         @endif
     </tbody>
 </table>

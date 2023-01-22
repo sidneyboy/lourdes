@@ -725,38 +725,45 @@ class HomeController extends Controller
 
     public function monthly_earning_proceed(Request $request)
     {
+        date_default_timezone_set('Asia/Manila');
+        $date = date('Y-m-d');
+        $year = date('Y');
         $monthly_sales = Reservations_details::select(
             DB::raw('year(created_at) as year'),
             DB::raw('month(created_at) as month'),
             DB::raw('sum(payment) as total_sales'),
             DB::raw('sum(downpayment) as downpayment'),
-        )->where(DB::raw('date(created_at)'), '>=', $request->input('year') . "-01-01")
+        )->whereMonth('created_at', $request->input('month'))
+            ->whereYear('created_at', $year)
             ->groupBy('year')
             ->groupBy('month')
-            ->get()
-            ->toArray();
+            ->get();
 
-        if (count($monthly_sales) != 0) {
-            foreach ($monthly_sales as $monthly_sales_result) {
-                $dateObj   = DateTime::createFromFormat('!m', $monthly_sales_result['month']);
-                $monthName = $dateObj->format('F'); // March
-                $month_label[] = $monthName;
-                $monthly_total_sales[] = round($monthly_sales_result['total_sales'] + $monthly_sales_result['downpayment'], 2);
-                $month[] = $monthly_sales_result['month'];
-            }
-        } else {
-            $month_label = 0;
-            $monthly_total_sales[] = '';
-            $month[] = '';
-        }
+
+        // ->where(DB::raw('date(created_at)'), '>=', $request->input('year') . "-01-01")
+
+        // if (count($monthly_sales) != 0) {
+        //     foreach ($monthly_sales as $monthly_sales_result) {
+        //         $dateObj   = DateTime::createFromFormat('!m', $monthly_sales_result['month']);
+        //         $monthName = $dateObj->format('F'); // March
+        //         $month_label[] = $monthName;
+        //         $monthly_total_sales[] = round($monthly_sales_result['total_sales'] + $monthly_sales_result['downpayment'], 2);
+        //         $month[] = $monthly_sales_result['month'];
+        //     }
+        // } else {
+        //     $month_label = 0;
+        //     $monthly_total_sales[] = '';
+        //     $month[] = '';
+        // }
 
 
 
         return view('monthly_earning_proceed')
-            ->with('month_label', $month_label)
-            ->with('monthly_total_sales', $monthly_total_sales)
-            ->with('month', $month)
-            ->with('year', $request->input('year'));
+            // ->with('month_label', $month_label)
+            // ->with('monthly_total_sales', $monthly_total_sales)
+            // ->with('month', $month)
+            ->with('monthly_sales', $monthly_sales)
+            ->with('month', $request->input('month'));
     }
 
     public function monthly_earning_view_sales_report($month)
