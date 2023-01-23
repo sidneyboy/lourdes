@@ -55,7 +55,12 @@ Route::get('/yearly_earning_view_sales_report/{year}', 'HomeController@yearly_ea
 Route::get('/monthly_earning_report_print/{month}', 'HomeController@monthly_earning_report_print')->name('monthly_earning_report_print');
 Route::get('/yearly_earning_report_print/{year}', 'HomeController@yearly_earning_report_print')->name('yearly_earning_report_print');
 
+Route::post('/message_reply_process/', 'HomeController@message_reply_process')->name('message_reply_process');
 
+
+
+Route::get('/search_message/', 'HomeController@search_message')->name('search_message');
+Route::get('/receipt/{id}', 'HomeController@receipt')->name('receipt');
 
 
 

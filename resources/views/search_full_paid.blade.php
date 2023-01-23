@@ -56,8 +56,7 @@
                                         <td>Last Name</td>
                                         <td>Information</td>
                                         <td>Payment</td>
-                                        {{-- <td>Transaction</td> --}}
-                                        {{-- <td>Cancel Option</td> --}}
+                                        <td>Receipt</td>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -166,6 +165,7 @@
                                                     </div>
                                                 </div>
                                             </td>
+                                            <td><a target="_blank" href="{{ url('receipt',['id' => $data->id]) }}" class="btn btn-sm btn-info btn-block">Print</a></td>
                                         </tr>
                                     @endforeach
                                 </tbody>

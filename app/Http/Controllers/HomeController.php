@@ -213,6 +213,11 @@ class HomeController extends Controller
         ]);
     }
 
+    public function message_reply_process(Request $request)
+    {
+        return $request->input();
+    }
+
 
     public function accomodation()
     {
@@ -296,16 +301,49 @@ class HomeController extends Controller
 
     public function message_process(Request $request)
     {
-        //return $request->input();
+       // return $request->input();
+        date_default_timezone_set('Asia/Manila');
+        $date = date('Y-m-d');
 
         $subject = '';
         $messages = $request->input('message');
         Mail::to($request->input('email'))->send(new Contact_us_mail($subject, $messages));
 
-        Contact_us::where('id', 1)
-            ->update(['status' => 'replied']);
+        Contact_us::where('id', $request->input('id'))
+            ->update([
+                'status' => 'replied',
+                'updated_at' => $date,
+            ]);
 
         return redirect('message')->with('success', 'Success');
+    }
+
+    public function search_message(Request $request)
+    {
+        //return $request->input();
+
+        $data_range = explode('-', $request->input('daterange'));
+        $date_from = date('Y-m-d', strtotime($data_range[0]));
+        $date_to = date('Y-m-d', strtotime($data_range[1]));
+        $contact_us = Contact_us::whereBetween('created_at', [$date_from, $date_to])->get();
+
+        $users = User::count();
+
+        $widget = [
+            'users' => $users,
+            //...
+        ];
+
+       
+        $message_count = Contact_us::where('status', 'Pending')->count();
+        $reservation_count = Reservations::where('status', 'Pending')->count();
+
+
+        return view('search_message', compact('widget'), [
+            'contact_us' => $contact_us,
+            'message_count' => $message_count,
+            'reservation_count' => $reservation_count,
+        ]);
     }
 
     public function reservations()
@@ -1182,6 +1220,15 @@ class HomeController extends Controller
             'reservations' => $reservations,
             'reservation_count' => $reservation_count,
             'message_count' => $message_count,
+        ]);
+    }
+
+    public function receipt($id)
+    {
+        $data = Reservations::where('id',$id)->first();
+
+        return view('receipt',[
+            'data' => $data,
         ]);
     }
 }
