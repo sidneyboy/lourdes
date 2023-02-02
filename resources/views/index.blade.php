@@ -495,7 +495,7 @@
     <script>
         var disabledDates = <?php echo json_encode($reserved_dates); ?>;
 
-        $('input').datepicker({
+        $('#datepicker').datepicker({
             inline: true,
             showOtherMonths: true,
             beforeShowDay: function(date) {

@@ -74,6 +74,8 @@ Route::get('/search_reservations/', 'HomeController@search_reservations')->name(
 Route::get('/search_partial_payment/', 'HomeController@search_partial_payment')->name('search_partial_payment');
 Route::get('/search_full_paid/', 'HomeController@search_full_paid')->name('search_full_paid');
 
+Route::get('/search_cancelled/', 'HomeController@search_cancelled')->name('search_cancelled');
+
 
 
 Route::get('/paid_downpayment/', 'HomeController@paid_downpayment')->name('paid_downpayment');

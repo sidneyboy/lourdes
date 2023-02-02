@@ -67,7 +67,7 @@
                     </th>
                 </tr>
                 <tr>
-                    <th style="text-align: right">Date Full Payment:</th>
+                    <th style="text-align: right">Total Amount Paid:</th>
                     <th style="text-align: left">
                         @foreach ($data->reservation_details as $details)
                             @php

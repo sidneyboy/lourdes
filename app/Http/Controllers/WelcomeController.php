@@ -7,7 +7,8 @@ use App\Models\About;
 use App\Models\Carousel;
 use App\Models\Contact_us;
 use App\Models\Reservations;
-use App\Mail\lacastilla_mail;
+use App\Mail\Contact_us_mail;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 
 class WelcomeController extends Controller
@@ -101,6 +102,10 @@ class WelcomeController extends Controller
         ]);
 
         $new->save();
+
+        $subject = '';
+        $messages = 'Thank you for choosing Nikan Resort Exclusive. Youve successfully booked your reservation. Please wait for the admin confirmation withing 24 business hours.';
+        Mail::to($request->input('email'))->send(new Contact_us_mail($subject, $messages));
 
         return redirect('welcome')->with('success', 'Thank you for choosing Nikan Resort');
     }

@@ -301,7 +301,7 @@ class HomeController extends Controller
 
     public function message_process(Request $request)
     {
-       // return $request->input();
+        // return $request->input();
         date_default_timezone_set('Asia/Manila');
         $date = date('Y-m-d');
 
@@ -334,7 +334,7 @@ class HomeController extends Controller
             //...
         ];
 
-       
+
         $message_count = Contact_us::where('status', 'Pending')->count();
         $reservation_count = Reservations::where('status', 'Pending')->count();
 
@@ -1223,11 +1223,35 @@ class HomeController extends Controller
         ]);
     }
 
+    public function search_cancelled(Request $request)
+    {
+        $users = User::count();
+
+        $widget = [
+            'users' => $users,
+            //...
+        ];
+
+        $message_count = Contact_us::where('status', 'Pending')->count();
+        $reservation_count = Reservations::where('status', 'Pending')->count();
+
+        $data_range = explode('-', $request->input('daterange'));
+        $date_from = date('Y-m-d', strtotime($data_range[0]));
+        $date_to = date('Y-m-d', strtotime($data_range[1]));
+        $reservations = Reservations::whereBetween('created_at', [$date_from, $date_to])->where('status', 'Cancelled')->get();
+
+        return view('search_cancelled', [
+            'reservations' => $reservations,
+            'reservation_count' => $reservation_count,
+            'message_count' => $message_count,
+        ]);
+    }
+
     public function receipt($id)
     {
-        $data = Reservations::where('id',$id)->first();
+        $data = Reservations::where('id', $id)->first();
 
-        return view('receipt',[
+        return view('receipt', [
             'data' => $data,
         ]);
     }
