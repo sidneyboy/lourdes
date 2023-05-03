@@ -380,8 +380,12 @@ class HomeController extends Controller
 
         $new->save();
 
+        $reservation_data = Reservations::where('id', $id)->first();
+        $date_from = $reservation_data->date_from;
+        $date_to = $reservation_data->date_to;
+
         $subject = '';
-        $messages = 'We are happy to tell you that your reservation has been acknowledge and approved. See you at Nikan Magdale Resort';
+        $messages = 'We are happy to tell you that your reservation has been acknowledge and approved. See you this coming ' . $date_from  . ' at Nikan Magdale Resort';
         Mail::to($email)->send(new Contact_us_mail($subject, $messages));
 
         return redirect('paid_downpayment')->with('success', 'Success');
@@ -515,8 +519,12 @@ class HomeController extends Controller
 
             $new->save();
 
+            $reservation_data = Reservations::where('id', $request->input('id'))->first();
+            $date_from = $reservation_data->date_from;
+            $date_to = $reservation_data->date_to;
+
             $subject = '';
-            $messages = 'We are happy to tell you that your reservation has been acknowledge and approved. See you at Nikan Magdale Resort';
+            $messages = 'We are happy to tell you that your reservation has been acknowledge and approved. See you this coming ' . $date_from  . ' at Nikan Magdale Resort';
             Mail::to($request->input('email'))->send(new Contact_us_mail($subject, $messages));
 
             return redirect('paid_downpayment')->with('success', 'Success');
@@ -534,8 +542,12 @@ class HomeController extends Controller
 
             $new->save();
 
+            $reservation_data = Reservations::where('id', $request->input('id'))->first();
+            $date_from = $reservation_data->date_from;
+            $date_to = $reservation_data->date_to;
+
             $subject = '';
-            $messages = 'We are happy to tell you that your reservation has been acknowledge and approved. See you at Nikan Magdale Resort';
+            $messages = 'We are happy to tell you that your reservation has been acknowledge and approved. See you this coming ' . $date_from  . ' at Nikan Magdale Resort';
             Mail::to($request->input('email'))->send(new Contact_us_mail($subject, $messages));
 
             return redirect('full_paid')->with('success', 'Success');
@@ -552,9 +564,13 @@ class HomeController extends Controller
             ]);
 
             $new->save();
+            
+            $reservation_data = Reservations::where('id', $request->input('id'))->first();
+            $date_from = $reservation_data->date_from;
+            $date_to = $reservation_data->date_to;
 
             $subject = '';
-            $messages = 'We are happy to tell you that your reservation has been acknowledge and approved. See you at Nikan Magdale Resort';
+            $messages = 'We are happy to tell you that your reservation has been acknowledge and approved. See you this coming ' . $date_from  . ' at Nikan Magdale Resort';
             Mail::to($request->input('email'))->send(new Contact_us_mail($subject, $messages));
 
             return redirect('partial_payment')->with('success', 'Success');
